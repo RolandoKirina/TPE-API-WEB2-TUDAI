@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-10-2022 a las 00:51:49
+-- Tiempo de generación: 02-11-2022 a las 22:51:53
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -34,17 +34,16 @@ CREATE TABLE `item` (
   `descripcion` text NOT NULL,
   `stock` int(11) NOT NULL,
   `img` varchar(50) DEFAULT NULL,
-  `id_marca` int(11) NOT NULL
+  `id_marca` int(11) NOT NULL,
+  `id_review` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `item`
 --
 
-INSERT INTO `item` (`id_chocolate`, `nombre_chocolate`, `precio_unidad`, `descripcion`, `stock`, `img`, `id_marca`) VALUES
-(50, 'Ferrero rocher', 700, 'Están formados por una capa de barquillo rellena con pasta de cacao y avellanas, recubierta por una capa de chocolate con avellanas trituradas y una avellana entera en el interior, además de manteca de palma, envueltos en papel metalizado y colocados individualmente sobre un molde de papel engrasado', 3, 'img/item/item634dd9d415a62.jpg', 3),
-(51, 'Dos corazones', 250, 'El icónico bocadito relleno y bañado con el dulce y exquisito chocolate con leche Felfort.', 12, 'img/item634ddb1e18352.jpg', 3),
-(52, 'Milka Oreo ', 250, 'Chocolate Milka', 23, 'img/item634ddc069f787.jpg', 20);
+INSERT INTO `item` (`id_chocolate`, `nombre_chocolate`, `precio_unidad`, `descripcion`, `stock`, `img`, `id_marca`, `id_review`) VALUES
+(66, 'hola para prpbar', 132, 'sda', 1, 'imgs6362e353279bb.jpg', 7, 0);
 
 -- --------------------------------------------------------
 
@@ -64,10 +63,31 @@ CREATE TABLE `marca` (
 --
 
 INSERT INTO `marca` (`id_marca`, `nombre_marca`, `anio_creacion`, `pais_marca`) VALUES
-(3, 'Ferrero', 1946, 'Italia'),
+(3, 'hola', 1946, 'Italia'),
 (7, 'Felfort', 1912, 'Argentina'),
-(20, 'Milka', 1901, 'Suiza'),
-(49, 'editar a ver', 1234, 'no se');
+(20, 'xddd', 1223, 'as'),
+(54, 'nueva', 123, 'no se');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `review`
+--
+
+CREATE TABLE `review` (
+  `id_review` int(11) NOT NULL,
+  `review` text NOT NULL,
+  `id_item` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `review`
+--
+
+INSERT INTO `review` (`id_review`, `review`, `id_item`) VALUES
+(1, 'no se', 66),
+(2, 'no se', 66),
+(3, 'Me gusto', 66);
 
 -- --------------------------------------------------------
 
@@ -106,6 +126,13 @@ ALTER TABLE `marca`
   ADD PRIMARY KEY (`id_marca`);
 
 --
+-- Indices de la tabla `review`
+--
+ALTER TABLE `review`
+  ADD PRIMARY KEY (`id_review`),
+  ADD KEY `FK_id_item` (`id_item`);
+
+--
 -- Indices de la tabla `users`
 --
 ALTER TABLE `users`
@@ -119,13 +146,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `item`
 --
 ALTER TABLE `item`
-  MODIFY `id_chocolate` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id_chocolate` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT de la tabla `marca`
 --
 ALTER TABLE `marca`
-  MODIFY `id_marca` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id_marca` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+
+--
+-- AUTO_INCREMENT de la tabla `review`
+--
+ALTER TABLE `review`
+  MODIFY `id_review` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
@@ -142,6 +175,12 @@ ALTER TABLE `users`
 --
 ALTER TABLE `item`
   ADD CONSTRAINT `item_ibfk_1` FOREIGN KEY (`id_marca`) REFERENCES `marca` (`id_marca`);
+
+--
+-- Filtros para la tabla `review`
+--
+ALTER TABLE `review`
+  ADD CONSTRAINT `review_ibfk_1` FOREIGN KEY (`id_item`) REFERENCES `item` (`id_chocolate`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
