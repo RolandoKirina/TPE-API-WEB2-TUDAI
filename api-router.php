@@ -10,7 +10,8 @@ $router->addRoute('reviews', 'GET', 'Reviewcontroller', 'getreviews');
 $router->addRoute('reviews/:ID', 'GET', 'Reviewcontroller', 'getreview');
 $router->addRoute('reviews/:ID', 'DELETE', 'Reviewcontroller', 'deletereview');
 $router->addRoute('reviews', 'POST', 'Reviewcontroller', 'addreview'); 
-   //$router->addRoute('reviews', 'PUT', 'Reviewcontroller', 'editreview');
+
+//$router->addRoute('reviews', 'PUT', 'Reviewcontroller', 'editreview');
 
 // ejecuta la ruta (sea cual sea)
 $router->route($_GET["resource"], $_SERVER['REQUEST_METHOD']);
