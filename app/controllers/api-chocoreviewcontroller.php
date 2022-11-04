@@ -11,28 +11,21 @@ class Reviewcontroller {
     function __construct () {
         $this->model = new Reviewmodel();
         $this->view = new Apiview();
-        // lee el body del request
+        // data se usa, para leer cada vez el body del request
         $this->data = file_get_contents("php://input");
-        // preguntar para q sirve
     }
 
     private function getdata() {
         return json_decode($this->data);
     }
-    //preguntar para que sirve.
+    //convierte la data del body en json.
 
     function getreviews ($params = null) {
         //https://localhost/api/usuario?sortby=id&order=desc 
-
         //idealmente tendria q quedar asi
-        // x ahora va a estar asi:
-        //https://localhost/api/usuario?order=desc 
-        //sortby = campo
-        //order=desc
         if (isset($_GET['order']) && (!empty($_GET['order']))){
             $order = $_GET['order'];
             if ($order == 'desc'){
-                //var_dump($order);
             $reviews = $this->model->orderdesc();
             $this->view->response($reviews);
             }
@@ -44,15 +37,14 @@ class Reviewcontroller {
                 $this->view->response("parametro incorrecto", 400);
             }
         }
-        // cuando hagamos order by verificar que existe el campo    que te manda el usuario..
-        //tiene que ser uno de tus campos, arreglo asociativo con campos de la tabla, si estas seteado en el arreglo
-        // si no esta seteado, mostrar el error..
-        //paginado
-        else if (isset($_GET['page']) && (isset($_GET['limit']))  { //(isset($_GET['page']) && (!empty($_GET['page'])) && 
+        elseif (isset($_GET['page']) && (isset($_GET['limit']))) {
             $page = $_GET['page'];
+
             $limit = $_GET['limit'];
-            $reviews = $this->model->paginate($limit);
-            $this->view->response($reviews);
+            //var_dump($page);
+           
+            //$reviews = $this->model->paginate($limit);
+            //$this->view->response($reviews);
         }
         else {
             $reviews = $this->model->getall();
@@ -60,6 +52,21 @@ class Reviewcontroller {
         }
     }
 
+
+    // cuando hagamos order by verificar que existe el campo  que te manda el usuario..
+    //evitar inyeccion sql
+    // si no esta seteado, mostrar el error..
+
+    function campos () {
+        $campos = [
+            "id" => "id_review",
+            "review" => "review" ,
+            "id_item" => "id_item",
+        ];
+    return $campos;
+    }
+
+    //paginado
     function getreview($params = null) {
         //obtengo id x get
         $id = $params[':ID'];
