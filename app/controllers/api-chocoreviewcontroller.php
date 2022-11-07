@@ -37,36 +37,39 @@ class Reviewcontroller {
                     $this->view->response("Campo incorrecto", 400);
                 }
             }
-        else if ((!isset($_GET['sortby']) || (!isset($_GET['order'])))) {
-            $this->view->response("escriba bien los campos", 400);
-        }
         elseif (isset($_GET['page']) && (isset($_GET['limit']))) {
                 $page = $_GET['page'];
                 $limit = $_GET['limit'];
                 if (is_numeric($page) && (is_numeric($limit))){
-                $paramers = $this->paramers();
-                   /*if ($paramers[$page] == ){
                     $reviews =  $this->model->paginate($page, $limit);
                     $this->view->response($reviews);
                    }
-                   else {
-                    $this->view->response("Escriba bien los campos", 400);
-                   }*/
+                else {
+                    $this->view->response("Debe ingresar un numero", 400);
+                }
+                }
+        elseif (isset($_GET['filter'])){
+            //http://localhost/projects/chocolate-rest/api/reviews?filter=valpr
+           $paramers =  $this->paramers();
+           $filter = $_GET['filter'];
+           if (($paramers['filter']) == 'filter'){
+            $reviews =  $this->model->filter($filter);
+                if(!empty($reviews)) {
+                    $this->view->response($reviews);
+                }
+                else {
+                    $this->view->response("No se encontro un registro", 200);
                 }
             
-            else {
-                $this->view->response("Debe ingresar un numero", 400);
-            }
+           }
         }
-        else if ((!isset($_GET['page']) || (!isset($_GET['limit'])))) {
-            $this->view->response("escriba bien los campos", 400);
-        }
-
         else {
-            $reviews = $this->model->getAll();
+            $reviews = $this->model->getall();
             $this->view->response($reviews);
         }
+    
     }
+
 
     function paramers ($params = null) {
         $paramers = array(
@@ -75,8 +78,7 @@ class Reviewcontroller {
         'id_item' => 'id_item',
         'asc' => 'asc',
         'desc' => 'desc',
-        'page' => 'page',
-        'limit' => 'limit'
+        'filter' => 'filter',
         );
     return $paramers;
     }

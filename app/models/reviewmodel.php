@@ -46,18 +46,23 @@
     }
 
     function sortbyorder ($sortby = null , $order = null ){
-        $query = $this->db->prepare("SELECT id_review, review, id_item FROM review ORDER BY $sortby $order");
+        $query = $this->db->prepare("SELECT * FROM review ORDER BY $sortby $order");
         $query->execute();
         $reviews = $query->fetchAll(PDO::FETCH_OBJ);
         return $reviews;
     }
 
-    function paginate ($page, $limit) {
+    function paginate ($page= null, $limit= null) {
         $query = $this->db->prepare("SELECT * FROM review LIMIT $page,$limit");
         $query->execute();
         $reviews = $query->fetchAll(PDO::FETCH_OBJ);
         return $reviews;
     }
-
+    function filter ($filter = null) {
+        $query = $this->db->prepare("SELECT * FROM review WHERE review LIKE '$filter%' ");
+        $query->execute();
+        $reviews = $query->fetchAll(PDO::FETCH_OBJ);
+        return $reviews;
+    }
 
  }
