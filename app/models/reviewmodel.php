@@ -37,20 +37,26 @@
         $query->execute([$review, $item]);
         return $this->db->lastInsertId();
     }
+
     function orderdesc () {
-        $query = $this->db->prepare("SELECT * FROM review ORDER BY id_review DESC");
+        $query = $this->db->prepare("SELECT * FROM review ORDER BY id_review desc");
         $query->execute();
         $reviews = $query->fetchAll(PDO::FETCH_OBJ);
         return $reviews;
     }
 
-    function paginate ($limit = null) {
-     //URL DE PAGINADO http://localhost/projects/chocolate-rest/api/reviews?page=1&limit=10
-     $query = $this->db->prepare("SELECT * FROM review LIMIT $limit");
-     $query->execute();
-     $reviews = $query->fetchAll(PDO::FETCH_OBJ);
-     return $reviews;
-     //preguntar si se puede....
+    function sortbyorder ($sortby = null , $order = null ){
+        $query = $this->db->prepare("SELECT id_review, review, id_item FROM review ORDER BY $sortby $order");
+        $query->execute();
+        $reviews = $query->fetchAll(PDO::FETCH_OBJ);
+        return $reviews;
+    }
+
+    function paginate ($page, $limit) {
+        $query = $this->db->prepare("SELECT * FROM review LIMIT $page,$limit");
+        $query->execute();
+        $reviews = $query->fetchAll(PDO::FETCH_OBJ);
+        return $reviews;
     }
 
 

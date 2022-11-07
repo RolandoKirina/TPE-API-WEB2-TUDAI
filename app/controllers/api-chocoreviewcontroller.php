@@ -22,51 +22,80 @@ class Reviewcontroller {
 
     function getreviews ($params = null) {
         //https://localhost/api/usuario?sortby=id&order=desc 
-        //idealmente tendria q quedar asi
-        if (isset($_GET['order']) && (!empty($_GET['order']))){
-            $order = $_GET['order'];
-            if ($order == 'desc'){
-            $reviews = $this->model->orderdesc();
-            $this->view->response($reviews);
+        //si existe sort y order y si esas variables existen en el array
+        if(isset($_GET['order']) && !isset($_GET['sortby']) && ($_GET['order'] == 'desc')) {
+            $this->orderdesc(); 
+        }
+        elseif(isset($_GET['sortby'])  && isset($_GET['order'])){
+                $paramers =  $this->paramers();
+                $sortby = $_GET['sortby'];
+                $order = $_GET['order']; 
+                if(isset($paramers[$sortby]) && (isset($paramers[$order]))) { 
+                    $this->sortby($sortby, $order);
+                }
+                else {
+                    $this->view->response("Campo incorrecto", 400);
+                }
             }
-            else if ($order == 'asc'){
-                $reviews = $this->model->getall();
-                $this->view->response($reviews);
-            }
-            else{
-                $this->view->response("parametro incorrecto", 400);
-            }
+        else if ((!isset($_GET['sortby']) || (!isset($_GET['order'])))) {
+            $this->view->response("escriba bien los campos", 400);
         }
         elseif (isset($_GET['page']) && (isset($_GET['limit']))) {
-            $page = $_GET['page'];
-
-            $limit = $_GET['limit'];
-            //var_dump($page);
-           
-            //$reviews = $this->model->paginate($limit);
-            //$this->view->response($reviews);
+                $page = $_GET['page'];
+                $limit = $_GET['limit'];
+                if (is_numeric($page) && (is_numeric($limit))){
+                $paramers = $this->paramers();
+                   /*if ($paramers[$page] == ){
+                    $reviews =  $this->model->paginate($page, $limit);
+                    $this->view->response($reviews);
+                   }
+                   else {
+                    $this->view->response("Escriba bien los campos", 400);
+                   }*/
+                }
+            
+            else {
+                $this->view->response("Debe ingresar un numero", 400);
+            }
         }
+        else if ((!isset($_GET['page']) || (!isset($_GET['limit'])))) {
+            $this->view->response("escriba bien los campos", 400);
+        }
+
         else {
-            $reviews = $this->model->getall();
+            $reviews = $this->model->getAll();
             $this->view->response($reviews);
         }
     }
 
-
-    // cuando hagamos order by verificar que existe el campo  que te manda el usuario..
-    //evitar inyeccion sql
-    // si no esta seteado, mostrar el error..
-
-    function campos () {
-        $campos = [
-            "id" => "id_review",
-            "review" => "review" ,
-            "id_item" => "id_item",
-        ];
-    return $campos;
+    function paramers ($params = null) {
+        $paramers = array(
+        'id_review' => 'id_review',
+        'review' => 'review',
+        'id_item' => 'id_item',
+        'asc' => 'asc',
+        'desc' => 'desc',
+        'page' => 'page',
+        'limit' => 'limit'
+        );
+    return $paramers;
     }
 
-    //paginado
+    function orderdesc($params = null) {
+        $reviews = $this->model->orderdesc();
+        $this->view->response($reviews);
+    }
+
+    function sortby($sortby = null, $order = null){
+        $reviews = $this->model->sortbyorder($sortby, $order);
+        if ($reviews){
+            $this->view->response($reviews);
+        }
+        else {
+            $this->view->response("escribio mal los campos", 400);
+        }
+    }
+
     function getreview($params = null) {
         //obtengo id x get
         $id = $params[':ID'];
