@@ -47,21 +47,18 @@ class Reviewcontroller {
                 else {
                     $this->view->response("Debe ingresar un numero", 400);
                 }
-                }
+            }
         elseif (isset($_GET['filter'])){
-            //http://localhost/projects/chocolate-rest/api/reviews?filter=valpr
+           //http://localhost/projects/chocolate-rest/api/reviews?filter=valpr
            $paramers =  $this->paramers();
            $filter = $_GET['filter'];
-           if (($paramers['filter']) == 'filter'){
-            $reviews =  $this->model->filter($filter);
+           $reviews =  $this->model->filter($filter);
                 if(!empty($reviews)) {
                     $this->view->response($reviews);
                 }
                 else {
                     $this->view->response("No se encontro un registro", 200);
                 }
-            
-           }
         }
         else {
             $reviews = $this->model->getall();
@@ -70,7 +67,6 @@ class Reviewcontroller {
     
     }
 
-
     function paramers ($params = null) {
         $paramers = array(
         'id_review' => 'id_review',
@@ -78,7 +74,6 @@ class Reviewcontroller {
         'id_item' => 'id_item',
         'asc' => 'asc',
         'desc' => 'desc',
-        'filter' => 'filter',
         );
     return $paramers;
     }
@@ -107,6 +102,7 @@ class Reviewcontroller {
         else 
           $this->view->response("La tarea con el id=$id no existe", 404);
     }
+    
     function deletereview($params = null) { 
         $id = $params[':ID'];
         $review = $this->model->get($id);
@@ -120,11 +116,11 @@ class Reviewcontroller {
     }
     function addreview ($params = null){
        $review = $this->getdata();
-       if  (empty($review->review) || empty($review->id_item)){
+       if  (empty($review->review)  || empty($review->score) || empty($review->id_item)){
         $this->view->response("Complete los datos", 400);    
        }
        else {
-        $this->model->add($review->review, $review->id_item);
+        $this->model->add($review->review, $review->score, $review->id_item);
         $this->view->response("La reseña se creo con éxito",  201);
        }
     }
