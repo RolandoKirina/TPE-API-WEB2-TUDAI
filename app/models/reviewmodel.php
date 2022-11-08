@@ -15,7 +15,7 @@
     }
 
     function getall ($params = NULL) {
-        $query = $this->db->prepare("SELECT * FROM review");
+        $query = $this->db->prepare("SELECT id_review, review, score, id_item, nombre_chocolate FROM review a INNER JOIN item b ON a.id_item = b.id_chocolate ");
         $query->execute();
         $reviews = $query->fetchAll(PDO::FETCH_OBJ);
         return $reviews;
@@ -53,7 +53,7 @@
     }
 
     function paginate ($page= null, $limit= null) {
-        $query = $this->db->prepare("SELECT * FROM review LIMIT $page,$limit");
+        $query = $this->db->prepare("SELECT * FROM review ORDER BY id_review LIMIT $page, $limit");
         $query->execute();
         $reviews = $query->fetchAll(PDO::FETCH_OBJ);
         return $reviews;
