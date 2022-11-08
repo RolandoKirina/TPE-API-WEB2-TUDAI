@@ -23,6 +23,7 @@ class Reviewcontroller {
     function getreviews ($params = null) {
         //https://localhost/api/usuario?sortby=id&order=desc 
         //si existe sort y order y si esas variables existen en el array
+        
         if(isset($_GET['order']) && !isset($_GET['sortby']) && ($_GET['order'] == 'desc')) {
             $this->orderdesc(); 
         }
@@ -100,7 +101,7 @@ class Reviewcontroller {
         if ($review)
             $this->view->response($review);
         else 
-          $this->view->response("La tarea con el id=$id no existe", 404);
+          $this->view->response("La review con el id=$id no existe", 404);
     }
     
     function deletereview($params = null) { 
@@ -108,10 +109,10 @@ class Reviewcontroller {
         $review = $this->model->get($id);
         if ($review){
             $review = $this->model->delete($id);
-            $this->view->response("la tarea con el id: $id se elimino con exito");
+            $this->view->response("la review  con el id: $id se elimino con exito");
         }
         else {
-            $this->view->response("la tarea con el id : $id no existe");
+            $this->view->response("la review con el id : $id no existe");
         }
     }
     function addreview ($params = null){
@@ -120,8 +121,14 @@ class Reviewcontroller {
         $this->view->response("Complete los datos", 400);    
        }
        else {
-        $this->model->add($review->review, $review->score, $review->id_item);
-        $this->view->response("La reseña se creo con éxito",  201);
+        $verify = $this->model->add($review->review, $review->score, $review->id_item);
+        if($verify) {
+            $this->view->response("La reseña se creo con éxito",  201);
+        }
+        else {
+            $this->view->response("La reseña no se pudo crear ya que el id no existe",  400);
+        }
+       
        }
     }
 }

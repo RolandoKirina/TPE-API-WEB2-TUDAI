@@ -21,7 +21,7 @@
         return $reviews;
     }
     function get ($id) {
-        $query = $this->db->prepare("SELECT * FROM review WHERE id_review=?");
+        $query = $this->db->prepare("SELECT id_review, review, score, id_item, nombre_chocolate FROM review a INNER JOIN item b ON a.id_item = b.id_chocolate  WHERE id_review=?");
         $query->execute([$id]);
         $review = $query->fetch(PDO::FETCH_OBJ);
         return $review;
@@ -32,10 +32,17 @@
         $query->execute([$id]);
     }
 
-    function add ($review, $item){
-        $query = $this->db->prepare("INSERT INTO review (review, id_item) VALUES (?, ?)");
-        $query->execute([$review, $item]);
-        return $this->db->lastInsertId();
+    function add ($review, $score, $item){
+        $verify = false;
+        try {
+            $query = $this->db->prepare("INSERT INTO review (review, score, id_item) VALUES (?, ?, ?)");
+            $query->execute([$review, $score, $item]);
+            $verify = $this->db->lastInsertId();       
+        }     
+        catch (PDOException $e) {
+            $verify = false;
+        }
+        return $verify;
     }
 
     function orderdesc () {
