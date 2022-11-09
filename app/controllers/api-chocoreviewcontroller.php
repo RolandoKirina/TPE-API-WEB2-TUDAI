@@ -41,12 +41,18 @@ class Reviewcontroller {
         elseif (isset($_GET['page']) && (isset($_GET['limit']))) {
                 $page = $_GET['page'];
                 $limit = $_GET['limit'];
-                if (is_numeric($page) && (is_numeric($limit))){
-                    $reviews =  $this->model->paginate($page, $limit);
-                    $this->view->response($reviews);
-                   }
-                else {
-                    $this->view->response("Debe ingresar un numero", 400);
+                try {
+                    if (is_numeric($page) && (is_numeric($limit))){
+                        $start = ($page -1) *  $limit;
+                        $reviews =  $this->model->paginate($start, $limit);
+                        $this->view->response($reviews);
+                       }
+                    else {
+                        $this->view->response("Debe ingresar un numero", 400);
+                    }
+                }
+                catch (PDOException $e){
+                    $this->view->response("Debe ingresar a partir de la pagina numero 1", 400);
                 }
             }
         elseif (isset($_GET['filter'])){
@@ -65,9 +71,8 @@ class Reviewcontroller {
             $reviews = $this->model->getall();
             $this->view->response($reviews);
         }
-    
     }
-
+    
     function paramers ($params = null) {
         $paramers = array(
         'id_review' => 'id_review',

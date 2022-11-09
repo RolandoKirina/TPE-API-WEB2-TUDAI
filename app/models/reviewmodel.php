@@ -59,10 +59,11 @@
         return $reviews;
     }
 
-    function paginate ($page= null, $limit= null) {
-        $query = $this->db->prepare("SELECT * FROM review ORDER BY id_review LIMIT $page, $limit");
+    function paginate ($start= null, $limit= null) {
+        $query = $this->db->prepare("SELECT * FROM review ORDER BY id_review LIMIT $limit OFFSET $start ");
         $query->execute();
         $reviews = $query->fetchAll(PDO::FETCH_OBJ);
+         
         return $reviews;
     }
     function filter ($filter = null) {
