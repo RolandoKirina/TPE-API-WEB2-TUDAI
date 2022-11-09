@@ -23,7 +23,35 @@ class Reviewcontroller {
     function getreviews ($params = null) {
         //https://localhost/api/usuario?sortby=id&order=desc 
         //si existe sort y order y si esas variables existen en el array
+        //si el usuario quiere paginar, ordenar, buscar y filtrar hacer algo
+
+        //si el usuario quiere paginar y ordenar
+        //paginar ordenar buscar
+        //paginar ordenar
+        //filtrar y paginar 
         
+        //si el usuario quiere filtrar y paginar
+        //si el usuario ordenar y filtrar
+        //hacer una individualmente
+        //no hacer y tener el get all normal
+
+
+        //filtrar 
+
+        //ordenar 
+        //paginar 
+        //variable sql que seleccione todo ir sumandole las variables x ejemplo order by....
+        if (isset($_GET['filter'])  && isset($_GET['sortby']) && isset($_GET['order']) && isset($_GET['page']) && isset($_GET['limit'])){
+            $filter = $_GET['filter'];
+            $sortby = $_GET['sortby'];
+            $order = $_GET['order']; 
+            $page = $_GET['page'];
+            $limit = $_GET['limit'];
+           
+        $reviews = $this->model->doall($filter, $sortby, $order, $page, $limit);
+        $this->view->response($reviews);
+        }
+    
         if(isset($_GET['order']) && !isset($_GET['sortby']) && ($_GET['order'] == 'desc')) {
             $this->orderdesc(); 
         }
@@ -57,7 +85,6 @@ class Reviewcontroller {
             }
         elseif (isset($_GET['filter'])){
            //http://localhost/projects/chocolate-rest/api/reviews?filter=valpr
-           $paramers =  $this->paramers();
            $filter = $_GET['filter'];
            $reviews =  $this->model->filter($filter);
                 if(!empty($reviews)) {

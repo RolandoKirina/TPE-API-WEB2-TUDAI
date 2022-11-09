@@ -20,6 +20,9 @@ http://localhost/tucarpetalocal/chocolate-rest/api/reviews?order=desc
 http://localhost/tucarpetalocal/chocolate-rest/api/reviews?page=numero&limit=numero
 
 
+#TODAS LAS COSAS A LA VEZ 
+http://localhost/projects/chocolate-rest/api/reviews?filter=3&sortyby=id_review&order=desc&page=1&limit=3
+
 
 
 
