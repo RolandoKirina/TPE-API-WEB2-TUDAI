@@ -38,7 +38,7 @@ class Reviewcontroller {
        if (isset($_GET['filter']) && !isset($_GET['sortby'])  && !isset($_GET['order']) && !isset($_GET['page']) && !isset($_GET['limit'])){
             //http://localhost/projects/chocolate-rest/api/reviews?filter=valpr
             $filter = $_GET['filter'];
-            $reviews =  $this->model->doall($filter);
+            $reviews =  $this->model->filter($filter);
                  if(isset($reviews)) {
                      $this->view->response($reviews);
                  }
@@ -114,14 +114,13 @@ class Reviewcontroller {
         
         //$reviews = $this->model->doall($filter, $sortby, $order, $start, $limit);
         //$this->view->response($reviews);
-        }
-        /*//mostrar todas las reseñas
+    
+        //mostrar todas las reseñas
         else {
             $reviews = $this->model->getall();
             $this->view->response($reviews);
         }
     }
-}*/
     function paramers ($params = null) {
         $paramers = array(
         'id_review' => 'id_review',
@@ -185,4 +184,4 @@ class Reviewcontroller {
        
        }
     }
-} 
+}
