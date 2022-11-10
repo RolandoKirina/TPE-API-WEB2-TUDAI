@@ -103,21 +103,40 @@ class Reviewcontroller {
                 $this->view->response("Debe ingresar a partir de la pagina numero 1", 400);
             }
         }
-        //filtrar ordenar buscar
-        /*elseif (isset($_GET['filter'])  && isset($_GET['sortby']) && isset($_GET['order']) && isset($_GET['page']) && isset($_GET['limit'])){
+        //ordenar paginar
+        elseif(isset($_GET['sortby'])  && isset($_GET['order']) && isset($_GET['page'])  && isset($_GET['limit']) && !isset($_GET['filter'])) {
+            $sortby = $_GET['sortby'];
+            $order = $_GET['order']; 
+            $page = $_GET['page'];
+            $limit = $_GET['limit'];
+            try {
+                if (is_numeric($page) && (is_numeric($limit))){
+                    $start = ($page -1) *  $limit;
+                    $this->model->doall($sortby, $order, $start, $limit);
+                    //$this->view->response($reviews);
+                   }
+                else {
+                    $this->view->response("Debe ingresar un numero", 400);
+                }
+            }
+            catch (PDOException $e){
+                $this->view->response("Debe ingresar a partir de la pagina numero 1", 400);
+            }
+        } 
+        //filtrar ordenar paginar
+        elseif (isset($_GET['filter'])  && isset($_GET['sortby']) && isset($_GET['order']) && isset($_GET['page']) && isset($_GET['limit'])){
             $filter = $_GET['filter'];
             $sortby = $_GET['sortby'];
             $order = $_GET['order']; 
             $page = $_GET['page'];
             $limit = $_GET['limit'];
-            $start = ($page -1) *  $limit;*/
+            $start = $page;
         
-        //$reviews = $this->model->doall($filter, $sortby, $order, $start, $limit);
-        //$this->view->response($reviews);
-    
-        //mostrar todas las reseñas
+        $reviews = $this->model->doall($filter, $sortby, $order, $start, $limit);
+        $this->view->response($reviews);
+        }
         else {
-            $reviews = $this->model->getall();
+            $reviews = $this->model->doall();
             $this->view->response($reviews);
         }
     }

@@ -72,16 +72,31 @@
         $paginate =  "LIMIT $limit OFFSET $start" ;
         $sentence = null;
         //filtrar y ordenar bien
-        if (!empty($filter) && !empty($sortby) && !empty($order) && empty($start) && empty($limit)) {
+       if (!empty($filter) && !empty($sortby) && !empty($order) && empty($start) && empty($limit)) {
             $sentence = $sql . $filtering . $ordering;
         }
         //filtrar y paginar anda
         elseif (!empty($filter) && !empty($start) && !empty($limit) && empty($sortby) && empty($order)) {
             $sentence = $sql . $filtering . $paginate;
+            
         }
-
-      
-
+        elseif (!empty($filter) && !empty($start) && !empty($limit) && !empty($sortby) && !empty($order)) {
+            $sentence = $sql . $filtering . $ordering . $paginate;
+        }
+        //get all masomenos
+        elseif (empty($filter) && empty($start) && empty($limit) && empty($sortby) && empty($order)) {
+            $sentence = $sql;
+        }
+        //ordenar y paginar no funciona :(
+       /* if (!empty($sortby) && !empty($order) && !empty($start) && empty($limit) && !empty($filter)) {
+            $sentence = $sql . $ordering. $paginate;
+        }*/
+       // var_dump($sortby); -> desc
+       // var_dump($order); -> 0
+      //  var_dump($start);  -> 3 es limit
+        //var_dump($limit); -> null filtrado
+        //var_dump($filter); -> id_review
+       
         
         $query = $this->db->prepare($sentence);
 
