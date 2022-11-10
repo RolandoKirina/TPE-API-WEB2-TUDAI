@@ -47,12 +47,13 @@ class Reviewcontroller {
             $order = $_GET['order']; 
             $page = $_GET['page'];
             $limit = $_GET['limit'];
+            $start = ($page -1) *  $limit;
            
-        $reviews = $this->model->doall($filter, $sortby, $order, $page, $limit);
+        $reviews = $this->model->doall($filter, $sortby, $order, $start, $limit);
         $this->view->response($reviews);
         }
     
-        if(isset($_GET['order']) && !isset($_GET['sortby']) && ($_GET['order'] == 'desc')) {
+        /*if(isset($_GET['order']) && !isset($_GET['sortby']) && ($_GET['order'] == 'desc')) {
             $this->orderdesc(); 
         }
         elseif(isset($_GET['sortby'])  && isset($_GET['order'])){
@@ -98,7 +99,7 @@ class Reviewcontroller {
             $reviews = $this->model->getall();
             $this->view->response($reviews);
         }
-    }
+    }*/
     
     function paramers ($params = null) {
         $paramers = array(
@@ -163,4 +164,5 @@ class Reviewcontroller {
        
        }
     }
+}
 }

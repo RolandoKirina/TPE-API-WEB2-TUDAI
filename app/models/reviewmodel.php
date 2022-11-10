@@ -67,7 +67,7 @@
         return $reviews;
     }
     function filter ($filter = null) {
-        $query = $this->db->prepare("SELECT score FROM review WHERE score>=?");
+        $query = $this->db->prepare("SELECT score FROM review WHERE score >= ?");
         $query->execute([$filter]);
         $reviews = $query->fetchAll(PDO::FETCH_OBJ);
         return $reviews;
@@ -75,11 +75,11 @@
 
     function doall ($filter = null, $sortby = null , $order = null , $start= null, $limit= null) {
         $sql = "SELECT * FROM review";
-        $filter = "WHERE score > ?";
-        $order=  "ORDER BY $sortby $order";
+        $filtering = " WHERE score > ? ";
+        $order = "ORDER BY $sortby $order ";
         $paginate =  "LIMIT $limit OFFSET $start" ;
-        $query = $this->db->prepare($sql . $filter . $order . $paginate);
-        $query->execute();
+        $query = $this->db->prepare($sql . $filtering . $order . $paginate);
+        $query->execute([$filter]);
         $reviews = $query->fetchAll(PDO::FETCH_OBJ);
         return $reviews;
     }
