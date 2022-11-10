@@ -22,85 +22,86 @@ class Reviewcontroller {
 
     function getreviews ($params = null) {
         //https://localhost/api/usuario?sortby=id&order=desc 
-        //si existe sort y order y si esas variables existen en el array
-        //si el usuario quiere paginar, ordenar, buscar y filtrar hacer algo
-
-        //si el usuario quiere paginar y ordenar
-        //paginar ordenar buscar
-        //paginar ordenar
-        //filtrar y paginar 
-        
-        //si el usuario quiere filtrar y paginar
-        //si el usuario ordenar y filtrar
-        //hacer una individualmente
-        //no hacer y tener el get all normal
-
-
-        //filtrar 
-
-        //ordenar 
-        //paginar 
-        //variable sql que seleccione todo ir sumandole las variables x ejemplo order by....
-        if (isset($_GET['filter'])  && isset($_GET['sortby']) && isset($_GET['order']) && isset($_GET['page']) && isset($_GET['limit'])){
+        //filtrar ordenar
+        //ordenar buscar
+        //ordenar y paginar
+    
+        //mostrar todo
+       
+        $filter = null;
+        $sortby = null;
+        $order = null;
+        $page = null;
+        $limit = null;
+        $start = null;
+       if (isset($_GET['filter'])){
+            //http://localhost/projects/chocolate-rest/api/reviews?filter=valpr
+            $filter = $_GET['filter'];
+            $reviews =  $this->model->doall($filter);
+                 if(isset($reviews)) {
+                     $this->view->response($reviews);
+                 }
+                 else {
+                     $this->view->response("No se encontro un registro", 200);
+                 }
+         }
+        //ordenar x campo
+        elseif(isset($_GET['sortby'])  && isset($_GET['order'])){
+            $paramers =  $this->paramers();
+            $sortby = $_GET['sortby'];
+            $order = $_GET['order']; 
+            if(isset($paramers[$sortby]) && (isset($paramers[$order]))) { 
+                $this->sortby($sortby, $order);
+            }
+            else {
+                $this->view->response("Campo incorrecto", 400);
+            }
+        }
+        // solo paginar
+        elseif (isset($_GET['page']) && (isset($_GET['limit']))) {
+            $page = $_GET['page'];
+            $limit = $_GET['limit'];
+            try {
+                if (is_numeric($page) && (is_numeric($limit))){
+                    $start = ($page -1) *  $limit;
+                    $reviews =  $this->model->paginate($start, $limit);
+                    $this->view->response($reviews);
+                   }
+                else {
+                    $this->view->response("Debe ingresar un numero", 400);
+                }
+            }
+            catch (PDOException $e){
+                $this->view->response("Debe ingresar a partir de la pagina numero 1", 400);
+            }
+        }
+        //filtrar y ordenar
+        elseif(isset($_GET['filter']) && isset($_GET['sortby'])  && isset($_GET['order'])){
+           $filter = $_GET['filter'];
+           $sortby = $_GET['sortby'];
+           $order = $_GET['order']; 
+           $reviews = $this->model->doall($filter, $sortby, $order);
+           $this->view->response($reviews);
+        }
+        //filtrar ordenar buscar
+        /*elseif (isset($_GET['filter'])  && isset($_GET['sortby']) && isset($_GET['order']) && isset($_GET['page']) && isset($_GET['limit'])){
             $filter = $_GET['filter'];
             $sortby = $_GET['sortby'];
             $order = $_GET['order']; 
             $page = $_GET['page'];
             $limit = $_GET['limit'];
-            $start = ($page -1) *  $limit;
-           
-        $reviews = $this->model->doall($filter, $sortby, $order, $start, $limit);
-        $this->view->response($reviews);
+            $start = ($page -1) *  $limit;*/
+        
+        //$reviews = $this->model->doall($filter, $sortby, $order, $start, $limit);
+        //$this->view->response($reviews);
         }
-    
-        /*if(isset($_GET['order']) && !isset($_GET['sortby']) && ($_GET['order'] == 'desc')) {
-            $this->orderdesc(); 
-        }
-        elseif(isset($_GET['sortby'])  && isset($_GET['order'])){
-                $paramers =  $this->paramers();
-                $sortby = $_GET['sortby'];
-                $order = $_GET['order']; 
-                if(isset($paramers[$sortby]) && (isset($paramers[$order]))) { 
-                    $this->sortby($sortby, $order);
-                }
-                else {
-                    $this->view->response("Campo incorrecto", 400);
-                }
-            }
-        elseif (isset($_GET['page']) && (isset($_GET['limit']))) {
-                $page = $_GET['page'];
-                $limit = $_GET['limit'];
-                try {
-                    if (is_numeric($page) && (is_numeric($limit))){
-                        $start = ($page -1) *  $limit;
-                        $reviews =  $this->model->paginate($start, $limit);
-                        $this->view->response($reviews);
-                       }
-                    else {
-                        $this->view->response("Debe ingresar un numero", 400);
-                    }
-                }
-                catch (PDOException $e){
-                    $this->view->response("Debe ingresar a partir de la pagina numero 1", 400);
-                }
-            }
-        elseif (isset($_GET['filter'])){
-           //http://localhost/projects/chocolate-rest/api/reviews?filter=valpr
-           $filter = $_GET['filter'];
-           $reviews =  $this->model->filter($filter);
-                if(!empty($reviews)) {
-                    $this->view->response($reviews);
-                }
-                else {
-                    $this->view->response("No se encontro un registro", 200);
-                }
-        }
+        /*//mostrar todas las reseñas
         else {
             $reviews = $this->model->getall();
             $this->view->response($reviews);
         }
-    }*/
-    
+    }
+}*/
     function paramers ($params = null) {
         $paramers = array(
         'id_review' => 'id_review',
@@ -164,5 +165,4 @@ class Reviewcontroller {
        
        }
     }
-}
-}
+} 

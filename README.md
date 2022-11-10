@@ -8,15 +8,15 @@ El endpoint de la API es: http://localhost/tucarpetalocal/chocolate-rest/api/rev
 http://localhost/tucarpetalocal/chocolate-rest/api/reviews.
 # Obtener una reseña:
 http://localhost/tucarpetalocal/chocolate-rest/api/reviews/id de reseña
-# Obtener las reseñas descendentemente por id:
+# Solo ordenar descendentemente por id:
 http://localhost/tucarpetalocal/chocolate-rest/api/reviews?order=desc
 # Crear una nueva reseña:
  verbo http POST + http://localhost/tucarpetalocal/chocolate-rest/api/reviews
 # Eliminar una reseña:
  verbo http DELETE + http://localhost/tucarpetalocal/chocolate-rest/api/reviews/id
-# Filtrar por reseña:
- http://localhost/tucarpetalocal/chocolate-rest/api/reviews?filter=algodereseña
-# Paginacion:
+# Solo Filtrar por puntuacion:
+ http://localhost/tucarpetalocal/chocolate-rest/api/reviews?filter=algodepuntuacion
+# Solo Paginar:
 http://localhost/tucarpetalocal/chocolate-rest/api/reviews?page=numero&limit=numero
 
 
