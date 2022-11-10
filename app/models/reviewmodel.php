@@ -72,22 +72,28 @@
         $paginate =  "LIMIT $limit OFFSET $start" ;
         $sentence = null;
         //filtrar
-        if (!empty($filter) && empty($sortby) && empty($order) && empty($start) && empty($limit)){
+        if (!empty($filter) && empty($sortby) && empty($order) && empty($start) && empty($limit)) {
            $sentence = $sql . $filtering;
         }
         //ordenar
-        elseif ((!empty($sortby)) && !empty($order) && empty($filter) && empty($start) && empty($limit)){
+        elseif ((!empty($sortby)) && !empty($order) && empty($filter) && empty($start) && empty($limit)) {
             $sentence = $sql . $ordering;
         }
         //paginar
-        elseif  (!empty($start) && !empty($limit) && empty($sortby) && empty($order) && empty($filter)){
+        elseif  (!empty($start) && !empty($limit) && empty($sortby) && empty($order) && empty($filter)) {
             $sentence = $sql . $paginate;
             //si esta vacio hacer algo......
         }
         //filtrar y ordenar
-        elseif ( !empty($filter) && !empty($sortby) && !empty($order) && empty($start) && empty($limit) ){
+        elseif ( !empty($filter) && !empty($sortby) && !empty($order) && empty($start) && empty($limit) ) {
             $sentence = $sql . $filtering . $ordering;
         }
+        //filtrar y paginar
+        elseif (!empty($filter) && !empty($start) && !empty($limit) && empty($sortby) && empty($order)) {
+            $sentence = $sql . $filtering . $paginate;
+        }
+        var_dump($sentence);
+
         
         $query = $this->db->prepare($sentence);
 

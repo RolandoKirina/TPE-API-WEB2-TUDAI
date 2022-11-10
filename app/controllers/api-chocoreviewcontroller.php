@@ -22,8 +22,9 @@ class Reviewcontroller {
 
     function getreviews ($params = null) {
         //https://localhost/api/usuario?sortby=id&order=desc 
-        //filtrar ordenar
-        //ordenar buscar
+        //filtrar ordenar paginar
+        
+        //paginar y filtrar
         //ordenar y paginar
     
         //mostrar todo
@@ -34,7 +35,7 @@ class Reviewcontroller {
         $page = null;
         $limit = null;
         $start = null;
-       if (isset($_GET['filter'])){
+       if (isset($_GET['filter']) && !isset($_GET['sortby'])  && !isset($_GET['order']) && !isset($_GET['page']) && !isset($_GET['limit'])){
             //http://localhost/projects/chocolate-rest/api/reviews?filter=valpr
             $filter = $_GET['filter'];
             $reviews =  $this->model->doall($filter);
@@ -46,7 +47,7 @@ class Reviewcontroller {
                  }
          }
         //ordenar x campo
-        elseif(isset($_GET['sortby'])  && isset($_GET['order'])){
+        elseif(isset($_GET['sortby'])  && isset($_GET['order']) && !isset($_GET['page']) && !isset($_GET['limit']) && !isset($_GET['filter'])){
             $paramers =  $this->paramers();
             $sortby = $_GET['sortby'];
             $order = $_GET['order']; 
@@ -58,7 +59,7 @@ class Reviewcontroller {
             }
         }
         // solo paginar
-        elseif (isset($_GET['page']) && (isset($_GET['limit']))) {
+        elseif (isset($_GET['page']) && (isset($_GET['limit']) && !isset($_GET['filter']) && !isset($_GET['sortby'])  && !isset($_GET['order']))  ) {
             $page = $_GET['page'];
             $limit = $_GET['limit'];
             try {
@@ -76,12 +77,31 @@ class Reviewcontroller {
             }
         }
         //filtrar y ordenar
-        elseif(isset($_GET['filter']) && isset($_GET['sortby'])  && isset($_GET['order'])){
+        elseif(isset($_GET['filter']) && isset($_GET['sortby'])  && isset($_GET['order']) && !isset($_GET['page']) && !isset($_GET['limit'])){
            $filter = $_GET['filter'];
            $sortby = $_GET['sortby'];
            $order = $_GET['order']; 
            $reviews = $this->model->doall($filter, $sortby, $order);
            $this->view->response($reviews);
+        }
+        //filtrar y paginar 
+        elseif(isset($_GET['filter']) && isset($_GET['page'])  && isset($_GET['limit']) && !isset($_GET['sortby'])  && !isset($_GET['order'])){
+            $filter = $_GET['filter'];
+            $page = $_GET['page'];
+            $limit = $_GET['limit'];
+            try {
+                if (is_numeric($page) && (is_numeric($limit))){
+                    $start = ($page -1) *  $limit;
+                    $reviews =  $this->model->paginate($start, $limit);
+                    $this->view->response($reviews);
+                   }
+                else {
+                    $this->view->response("Debe ingresar un numero", 400);
+                }
+            }
+            catch (PDOException $e){
+                $this->view->response("Debe ingresar a partir de la pagina numero 1", 400);
+            }
         }
         //filtrar ordenar buscar
         /*elseif (isset($_GET['filter'])  && isset($_GET['sortby']) && isset($_GET['order']) && isset($_GET['page']) && isset($_GET['limit'])){
