@@ -18,10 +18,14 @@ http://localhost/tucarpetalocal/chocolate-rest/api/reviews?order=desc
  http://localhost/tucarpetalocal/chocolate-rest/api/reviews?filter=algodepuntuacion
 # Solo Paginar:
 http://localhost/tucarpetalocal/chocolate-rest/api/reviews?page=numero&limit=numero
-
-# filtrar, paginar, ordenar
-http://localhost/projects/chocolate-rest/api/reviews?filter=3&sortyby=id_review&order=desc&page=1&limit=3
-
+# filtrar, paginar, ordenar :
+http://localhost/projects/chocolate_rest/api/reviews?filter=numero&sortby=campo&order=elquequieras&page=numero&limit=loquequieras
+# filtrar y ordenar :
+http://localhost/projects/chocolate_rest/api/reviews?filter=numerodepuntuacion&sortby=campo&order=elquequieras
+# filtrar y paginar :
+http://localhost/projects/chocolate_rest/api/reviews?filter=numerodepuntuacion&page=numero&limit=numero
+# ordenar y paginar : 
+http://localhost/projects/chocolate_rest/api/reviews?sortby=campo&order=asc/desc&page=numero&limit=numero
 
 
 

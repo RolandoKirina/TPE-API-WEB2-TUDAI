@@ -14,22 +14,11 @@
         $this->db =  $this->connect();
     }
 
-    function getall ($params = NULL) {
-        $query = $this->db->prepare("SELECT id_review, review, score, id_item, nombre_chocolate FROM review a INNER JOIN item b ON a.id_item = b.id_chocolate ");
-        $query->execute();
-        $reviews = $query->fetchAll(PDO::FETCH_OBJ);
-        return $reviews;
-    }
     function get ($id) {
         $query = $this->db->prepare("SELECT id_review, review, score, id_item, nombre_chocolate FROM review a INNER JOIN item b ON a.id_item = b.id_chocolate  WHERE id_review=?");
         $query->execute([$id]);
         $review = $query->fetch(PDO::FETCH_OBJ);
         return $review;
-    }
-
-    function delete ($id) {
-        $query = $this->db->prepare("DELETE FROM review WHERE id_review=?");
-        $query->execute([$id]);
     }
 
     function add ($review, $score, $item){
@@ -44,82 +33,28 @@
         }
         return $verify;
     }
-    function sortbyorder ($sortby = null , $order = null ){
-        $query = $this->db->prepare("SELECT * FROM review ORDER BY $sortby $order");
-        $query->execute();
-        $reviews = $query->fetchAll(PDO::FETCH_OBJ);
-        return $reviews;
-    }
 
-    function paginate ($start= null, $limit= null) {
-        $query = $this->db->prepare("SELECT * FROM review ORDER BY id_review LIMIT $limit OFFSET $start ");
-        $query->execute();
-        $reviews = $query->fetchAll(PDO::FETCH_OBJ);
-         
-        return $reviews;
-    }
-    function filter ($filter = null) {
-        $query = $this->db->prepare("SELECT score FROM review WHERE score >= ?");
-        $query->execute([$filter]);
-        $reviews = $query->fetchAll(PDO::FETCH_OBJ);
-        return $reviews;
-    }
+    function doall ($sentence = null , $filtering = null) {
+        
+        
+        // si se usa el filtro, entra la variable filtering en el execute
+        try {
+            if($filtering) { 
+                $query = $this->db->prepare($sentence);
+                $query->execute([$filtering]);
+            }
+            else {
+                $query = $this->db->prepare($sentence);
+                $query->execute();
+            }
+            $reviews = $query->fetchAll(PDO::FETCH_OBJ); 
+        }
+        catch(PDOException $e){
+           $reviews = false;
 
-    function doall ($filter = null, $sortby = null , $order = null , $start= null, $limit= null) {
-        $sql = "SELECT id_review, review, score, id_item, nombre_chocolate FROM review a INNER JOIN item b ON a.id_item = b.id_chocolate";
-        $filtering = " WHERE score > ? ";
-        $ordering = "ORDER BY $sortby $order ";
-        $paginate =  "LIMIT $limit OFFSET $start" ;
-        $sentence = null;
-        //filtrar y ordenar bien
-       if (!empty($filter) && !empty($sortby) && !empty($order) && empty($start) && empty($limit)) {
-            $sentence = $sql . $filtering . $ordering;
         }
-        //filtrar y paginar anda
-        elseif (!empty($filter) && !empty($start) && !empty($limit) && empty($sortby) && empty($order)) {
-            $sentence = $sql . $filtering . $paginate;
-            
-        }
-        elseif (!empty($filter) && !empty($start) && !empty($limit) && !empty($sortby) && !empty($order)) {
-            $sentence = $sql . $filtering . $ordering . $paginate;
-        }
-        //get all masomenos
-        elseif (empty($filter) && empty($start) && empty($limit) && empty($sortby) && empty($order)) {
-            $sentence = $sql;
-        }
-        //ordenar y paginar no funciona :(
-       /* if (!empty($sortby) && !empty($order) && !empty($start) && empty($limit) && !empty($filter)) {
-            $sentence = $sql . $ordering. $paginate;
-        }*/
-       // var_dump($sortby); -> desc
-       // var_dump($order); -> 0
-      //  var_dump($start);  -> 3 es limit
-        //var_dump($limit); -> null filtrado
-        //var_dump($filter); -> id_review
        
-        
-        $query = $this->db->prepare($sentence);
-
-        if(!empty($filter)) {   //si se usa el filtro, usar variable en execute
-            $query->execute([$filter]);
-        }
-        else {
-            $query->execute();
-        }
-
-        
-        $reviews = $query->fetchAll(PDO::FETCH_OBJ);
         return $reviews;
-    
     }
-
- }
- 
- //paginar ordenar filtrar
- //paginar y filtrar
- //ordenar y filtrar
-//paginar y ordenar
-//paginar
-//ordenar
-//filtrar
- 
+  }
+   
