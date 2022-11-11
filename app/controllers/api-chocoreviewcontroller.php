@@ -124,6 +124,9 @@ class Reviewcontroller {
 
                 $sentence = $sql . $ordering . $paginate;
             }
+            else {
+                $this->errorparams();
+            }
         }
         //filtrar, ordenar y paginar
         else if(isset($_GET['filter']) && isset($_GET['order']) && isset($_GET['sortby']) && isset($_GET['page']) && isset($_GET['limit'])) {
@@ -134,7 +137,7 @@ class Reviewcontroller {
             $page = $_GET['page'];
             $limit = $_GET['limit'];
        
-            if(isset($paramers[$sortby]) && isset($paramers[$order]) && is_numeric($page) && (is_numeric($limit))) { //solo si los campos existen en la tabla se arma la sentencia con las variables y los valores de page y limit son numeros, se cumplen las condiciones.
+            if(isset($paramers[$sortby]) && isset($paramers[$order]) && is_numeric($page) && (is_numeric($limit)) && (is_numeric($filter))) { //solo si los campos existen en la tabla se arma la sentencia con las variables y los valores de page y limit son numeros, se cumplen las condiciones.
 
                 $start = ($page -1) *  $limit;
 
@@ -143,13 +146,15 @@ class Reviewcontroller {
 
                 $sentence = $sql . $filterquery . $ordering . $paginate;
             }
+            else {
+                $this->errorparams();
+            }
         }
         
         //seccion ejecucion de la sentencia y retorno de la respuesta
 
         if(!empty($filter)) {   //si se usa el filtro, usar variable en execute
             $filtering = $filter;
-        
         }
 
         $reviews = $this->model->doall($sentence, $filtering);
