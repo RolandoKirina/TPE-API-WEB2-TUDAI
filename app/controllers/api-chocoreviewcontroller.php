@@ -163,7 +163,7 @@ class Reviewcontroller {
             $this->view->response($reviews);
         }
         else {
-            $this->view->response("Parametros incorrectos ",400);
+            $this->errorparams();
         }
      }
     
@@ -172,7 +172,7 @@ class Reviewcontroller {
         die();
     }
     function errorparams (){
-        $this->view->response("parametros incorrectos", 400);
+        $this->view->response("Parametros incorrectos", 400);
         die();
     }
     function paramers ($params = null) {
@@ -184,21 +184,6 @@ class Reviewcontroller {
         'desc' => 'desc',
         );
     return $paramers;
-    }
-
-    function orderdesc($params = null) {
-        $reviews = $this->model->orderdesc();
-        $this->view->response($reviews);
-    }
-
-    function sortby($sortby = null, $order = null){
-        $reviews = $this->model->sortbyorder($sortby, $order);
-        if ($reviews){
-            $this->view->response($reviews);
-        }
-        else {
-            $this->view->response("escribio mal los campos", 400);
-        }
     }
 
     function getreview($params = null) {
@@ -216,10 +201,10 @@ class Reviewcontroller {
         $review = $this->model->get($id);
         if ($review){
             $review = $this->model->delete($id);
-            $this->view->response("la review  con el id: $id se elimino con exito");
+            $this->view->response("la review  con el id: $id se elimino con exito", 200);
         }
         else {
-            $this->view->response("la review con el id : $id no existe");
+            $this->view->response("la review con el id : $id no existe", 404);
         }
     } 
 

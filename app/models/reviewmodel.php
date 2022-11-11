@@ -35,8 +35,6 @@
     }
 
     function doall ($sentence = null , $filtering = null) {
-        
-        
         // si se usa el filtro, entra la variable filtering en el execute
         try {
             if($filtering) { 
@@ -53,7 +51,6 @@
            $reviews = false;
 
         }
-       
         return $reviews;
     }
   }
