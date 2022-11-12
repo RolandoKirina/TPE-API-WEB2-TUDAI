@@ -170,9 +170,10 @@ class Reviewcontroller {
                     if ($reviews){
                         $this->view->response($reviews);
                     }
-                    else {
-                        $this->view->response("No existen mas paginas disponibles", 404);
+                    elseif ($reviews == []){
+                        $this->view->response("No existe una reseña que cumpla con esas condiciones", 404);
                     }
+           
                 }
                 //cuando no es numerico limite o pagina o filtro
                 elseif (isset($paramers[$sortby]) && isset($paramers[$order]) && !is_numeric($page) && (!is_numeric($limit)) && (!is_numeric($filter))) {
