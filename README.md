@@ -21,10 +21,10 @@ Si la solicitud sale bien, el "status code" será 200 OK.
 # Crear una nueva reseña :
  verbo http POST + http://localhost/tucarpetalocal/chocolate-rest/api/reviews + http body
 Ejemplo de body para el post:
-{
-  "review": "string",
-  "score": 1,
-  "id_item": 2
+{   
+    "review": "La verdad me encanto este chocolate",
+    "score": 5,
+    "fk_id_chocolate": 67
 }
 Si la solicitud sale bien, el "status code" será 201 CREATED. 
 

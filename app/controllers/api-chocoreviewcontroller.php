@@ -174,8 +174,12 @@ class Reviewcontroller {
                         $this->view->response("No existen mas paginas disponibles", 404);
                     }
                 }
-                else {
+                //cuando no es numerico limite o pagina o filtro
+                elseif (isset($paramers[$sortby]) && isset($paramers[$order]) && !is_numeric($page) && (!is_numeric($limit)) && (!is_numeric($filter))) {
                     $this->error();
+                }
+                else {
+                    $this->errorparams();
                 }
             }
             catch (PDOException $e){
@@ -202,7 +206,7 @@ class Reviewcontroller {
         $paramers = array(
         'id_review' => 'id_review',
         'review' => 'review',
-        'id_item' => 'id_item',
+        'fk_id_chocolate' => 'fk_id_chocolate',
         'asc' => 'asc',
         'desc' => 'desc',
         );
@@ -225,21 +229,32 @@ class Reviewcontroller {
         $review = $this->model->get($id);
         if ($review) {
             $this->model->delete($id);
-            $this->view->response("ha sido borrada", 200);
-        } else 
-            $this->view->response("La reseña con el id=$id no existe", 404);
+            $this->view->response("La reseña con el id $id , se ha eliminado con éxito.", 200);
+        } 
+        else 
+            $this->view->response("La reseña con el id $id no existe.", 404);
     }
 
 
-    function addreview ($params = null) {
-       $review = $this->getdata();
-       if  (empty($review->review)  || empty($review->score) || empty($review->id_item)){
-        $this->view->response("Ingrese todos los datos", 400);    
-       }
-       else {
-        $verify = $this->model->add($review->review, $review->score, $review->id_item);
-        $this->view->response("ha sido creado con exito",  201);
-       }
+    public function addreview ($params = null) {
+        $review = $this->getData();
+
+        if (empty($review->review) || empty($review->score) || empty($review->fk_id_chocolate)) {
+            $this->view->response("Complete todos los datos del body", 400);
+        } 
+        else {
+            try {
+                $id = $this->model->add($review->review, $review->score, $review->fk_id_chocolate);
+                $this->view->response("Reseña creada", 201);
+            }
+            catch (PDOException $e){
+                $this->view->response("La id de ese chocolate no existe, pruebe con otra id", 404);
+            }
+        }
     }
+
+
+
+
 
 }
