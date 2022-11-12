@@ -32,7 +32,12 @@ class Reviewcontroller {
         if(isset($_GET['filter']) && !empty($_GET['filter']) && !isset($_GET['sortby']) && !isset($_GET['order']) && !isset($_GET['page']) && !isset($_GET['limit'])) {
             $filter = $_GET['filter'];
             if (is_numeric($filter)){
-               $this->model->filter($filter);
+               $reviews = $this->model->filter($filter);
+               if ($reviews)
+               $this->view->response($reviews);
+               else {
+                   $this->view->response("No existen reseñas con esa puntuacion", 404);
+               }
             }
             else {
                 $this->error();
@@ -57,8 +62,14 @@ class Reviewcontroller {
             try {
                 if (is_numeric($page) && (is_numeric($limit))) {
                     $start = ($page -1) *  $limit;
-                   $this->model->paginate($start, $limit);
-                }
+                    $reviews = $this->model->paginate($start, $limit);
+                    if ($reviews){
+                        $this->view->response($reviews);
+                    }
+                    else {
+                        $this->view->response("No existen mas paginas disponibles", 200);
+                    }
+                 }
                 else{
                     $this->error();
                 }
@@ -75,7 +86,11 @@ class Reviewcontroller {
             if (is_numeric($filter)){
                 if(isset($paramers[$sortby]) && isset($paramers[$order])) { //solo si los campos existen en la tabla se arma la sentencia con las variables
                     $reviews = $this->model->filterandorder($filter, $sortby , $order);
+                    if ($reviews)
                     $this->view->response($reviews);
+                    else {
+                        $this->view->response("No existen reseñas con esa puntuacion", 404);
+                    }
                 }
                 else {
                     $this->errorparams();
@@ -91,7 +106,12 @@ class Reviewcontroller {
                 if (is_numeric($page) && (is_numeric($limit)) && (is_numeric($filter))) {
                     $start = ($page -1) *  $limit;
                     $reviews = $this->model->filterandpaginate($filter, $start , $limit);
-                    $this->view->response($reviews);
+                    if ($reviews){
+                        $this->view->response($reviews);
+                    }
+                    else {
+                        $this->view->response("No existe el recurso que esta pidiendo", 404);
+                    }
                 } 
                 else {
                     $this->error();
@@ -112,7 +132,11 @@ class Reviewcontroller {
                 if (isset($paramers[$sortby]) && isset($paramers[$order]) && is_numeric($page) && (is_numeric($limit))) { 
                     $start = ($page -1) *  $limit;
                     $reviews = $this->model->orderandpaginate($sortby , $order, $start, $limit);
+                    if ($reviews)
                     $this->view->response($reviews);
+                    else {
+                        $this->view->response("No existen mas paginas disponibles", 404);
+                    }
                 }
                 else {
                     $this->errorparams();
@@ -122,12 +146,18 @@ class Reviewcontroller {
                 $this->view->response("Debe ingresar a partir de la pagina 1", 400);
            }
         }
-        else if (isset($_GET['order'])){
-            $reviews = $this->model->orderdesc();
-            $this->view->response($reviews);
+        //orden solo...
+        else if (isset($_GET['order']) && !isset($_GET['filter']) && !isset($_GET['sortby']) && !isset($_GET['page']) && !isset($_GET['limit'])){
+            if ($_GET['order'] == 'desc') {
+                $reviews = $this->model->orderdesc();
+                $this->view->response($reviews);
+            }
+            else {
+                $this->errorparams();
+            }
         }
         //filtrar, ordenar y paginar
-        else if (isset($_GET['filter']) && isset($_GET['order']) && isset($_GET['sortby']) && isset($_GET['page']) && isset($_GET['limit'])) {
+        else if (isset($_GET['filter']) && isset($_GET['sortby']) && isset($_GET['order']) && isset($_GET['page']) && isset($_GET['limit'])) {
             $filter = $_GET['filter'];
             $sortby = $_GET['sortby'];
             $order = $_GET['order'];
@@ -137,7 +167,12 @@ class Reviewcontroller {
                 if(isset($paramers[$sortby]) && isset($paramers[$order]) && is_numeric($page) && (is_numeric($limit)) && (is_numeric($filter))) { 
                     $start = ($page -1) *  $limit;
                     $reviews = $this->model->filterorderpaginate($filter, $sortby, $order, $start, $limit);
-                    $this->view->response($reviews);
+                    if ($reviews){
+                        $this->view->response($reviews);
+                    }
+                    else {
+                        $this->view->response("No existen mas paginas disponibles", 404);
+                    }
                 }
                 else {
                     $this->error();
@@ -186,29 +221,24 @@ class Reviewcontroller {
     
     function deletereview($params = null) { 
         $id = $params[':ID'];
+
         $review = $this->model->get($id);
-        if ($review){
-            $review = $this->model->delete($id);
-            $this->view->response("la review  con el id: $id se elimino con exito", 200);
-        }
-        else {
-            $this->view->response("la review con el id : $id no existe", 404);
-        }
-    } 
+        if ($review) {
+            $this->model->delete($id);
+            $this->view->response("ha sido borrada", 200);
+        } else 
+            $this->view->response("La reseña con el id=$id no existe", 404);
+    }
+
 
     function addreview ($params = null) {
        $review = $this->getdata();
        if  (empty($review->review)  || empty($review->score) || empty($review->id_item)){
-        $this->view->response("Complete los datos", 400);    
+        $this->view->response("Ingrese todos los datos", 400);    
        }
        else {
         $verify = $this->model->add($review->review, $review->score, $review->id_item);
-        if($verify) {
-            $this->view->response("La reseña se creo con éxito",  201);
-        }
-        else {
-            $this->view->response("La reseña no se pudo crear ya que el id no existe",  400);
-        }
+        $this->view->response("ha sido creado con exito",  201);
        }
     }
 

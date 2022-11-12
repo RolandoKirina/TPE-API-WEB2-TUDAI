@@ -6,7 +6,7 @@ class ApiView {
         header("Content-Type: application/json");
         header("HTTP/1.1 " . $status . " " . $this->_requestStatus($status));
         
-        // convierte los datos a un formato json
+        // convierte los datos a un formato json y los muestra por pantalla
         echo json_encode($data);
     }
 

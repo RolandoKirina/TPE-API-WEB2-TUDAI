@@ -22,18 +22,16 @@
     }
 
     function add ($review, $score, $item) {
-        $verify = false;
-        try {
-            $query = $this->db->prepare("INSERT INTO review (review, score, id_item) VALUES (?, ?, ?)");
-            $query->execute([$review, $score, $item]);
-            $verify = $this->db->lastInsertId();       
-        }     
-        catch (PDOException $e) {
-            $verify = false;
-        }
-        return $verify;
+        $query = $this->db->prepare("INSERT INTO review (review, score, id_item) VALUES (?, ?, ?)");
+        $query->execute([$review, $score, $item]);
+        $verify = $this->db->lastInsertId();       
     }
-    
+   
+    public function delete($id) {
+        $query = $this->db->prepare("DELETE FROM review WHERE id_review = ?");
+        $query->execute([$id]);
+    }
+
     function getall ($params = NULL) {
         $query = $this->db->prepare("SELECT id_review, review, score, id_item, nombre_chocolate FROM review a INNER JOIN item b ON a.id_item = b.id_chocolate ");
         $query->execute();
@@ -61,7 +59,7 @@
         return $reviews;
     }
     function filter ($filter = null) {
-        $query = $this->db->prepare("SELECT score FROM review WHERE score >= ?");
+        $query = $this->db->prepare("SELECT id_review, review, score, id_item, nombre_chocolate FROM review a INNER JOIN item b ON a.id_item = b.id_chocolate WHERE score >= ?");
         $query->execute([$filter]);
         $reviews = $query->fetchAll(PDO::FETCH_OBJ);
         return $reviews;
@@ -91,4 +89,5 @@
         $reviews = $query->fetchAll(PDO::FETCH_OBJ);
         return $reviews;
     }
+
  }
