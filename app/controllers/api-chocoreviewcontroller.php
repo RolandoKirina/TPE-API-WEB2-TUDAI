@@ -256,9 +256,4 @@ class Reviewcontroller {
             }
         }
     }
-
-
-
-
-
 }
