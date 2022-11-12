@@ -173,6 +173,9 @@ class Reviewcontroller {
                     elseif ($reviews == []){
                         $this->view->response("No existe una reseña que cumpla con esas condiciones", 404);
                     }
+                    else {
+                        $this->errorparams();
+                    }
            
                 }
                 //cuando no es numerico limite o pagina o filtro
