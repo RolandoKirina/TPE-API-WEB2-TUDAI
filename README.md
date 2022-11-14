@@ -71,7 +71,7 @@ Si la solicitud sale bien, el "status code" será 200 OK.
  400 Bad Request: Este error puede salir, debido a que el servidor no pudo interpretar la solicitud dada una sintaxis inválida en la url.
 
 
- Si escribe mal los parametros, por defecto se mostraran las reseñas.
+ Si escribe mal alguno de los parametros, por defecto se mostraran las reseñas ordenadas ascendementemente por id de reseña.
 
 
 
