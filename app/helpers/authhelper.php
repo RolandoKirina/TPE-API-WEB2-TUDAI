@@ -1,7 +1,8 @@
 <?php
  class Authhelper {
-    function getToken(){
-        $auth = $this->getAuthHeader(); // [0] Bearer , [1] header.payload.signature
+    
+    function gettoken(){
+        $auth = $this->Getauthheader(); // [0] Bearer , [1] header.payload.signature
         $auth = explode(" ", $auth);
         if($auth[0]!="Bearer" || count($auth) != 2){
             return array(); 
@@ -25,7 +26,7 @@
     }
 
     function Islogged(){
-        $payload = $this->getToken();
+        $payload = $this->gettoken();
         if(isset($payload->id))
             return true;
         else

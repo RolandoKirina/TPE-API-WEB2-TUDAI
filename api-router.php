@@ -1,6 +1,7 @@
 <?php
 require_once './libs/Router.php';
 require_once './app/controllers/api-chocoreviewcontroller.php';
+require_once './app/controllers/authcontroller.php';
 
 // create the router
 $router = new Router();
@@ -12,7 +13,7 @@ $router->addRoute('reviews/:ID', 'DELETE', 'Reviewcontroller', 'deletereview');
 $router->addRoute('reviews', 'POST', 'Reviewcontroller', 'addreview'); 
 
 // get token
-$router->addRoute("auth/token", 'GET', 'Authcontroller', 'getToken');
+$router->addRoute("auth/token", 'GET', 'Authcontroller', 'gettoken');
 // url not found
 $router->setDefaultRoute('Reviewcontroller', 'pagenotfound');
 

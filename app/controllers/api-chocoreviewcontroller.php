@@ -13,7 +13,7 @@ class Reviewcontroller {
     function __construct () {
         $this->model = new Reviewmodel();
         $this->view = new Apiview();
-        $this->helper = new authhelper();
+        $this->helper = new Authhelper();
         // data se usa, para leer cada vez el body del request
         $this->data = file_get_contents("php://input");
     }
@@ -55,14 +55,15 @@ class Reviewcontroller {
             $sortby = $_GET['sortby'];
             $order = $_GET['order'];
             
-            if(isset($paramers[$sortby])&& isset($paramers[$order])) { 
+            if(isset($paramers[$sortby]) && isset($paramers[$order])) { 
                 $reviews = $this->model->sortbyorder($sortby, $order);
                 $this->view->response($reviews);
             }
             else {
                 $this->errorparams();
             }
-        }//paginate
+        }
+        //paginate
         else if(isset($_GET['page']) && isset($_GET['limit']) && !isset($_GET['order']) && !isset($_GET['sortby']) && !isset($_GET['filter']))  {
             $page = $_GET['page'];
             $limit = $_GET['limit'];
@@ -253,11 +254,7 @@ class Reviewcontroller {
     }
     
     function deletereview($params = null) { 
-        if(!$this->Authelper->Islogged()){
-            $this->view->response("Forbidden, you are not logged", 401);
-            return;
-        }
-    
+
         if ($params){
             $id = $params[':ID'];
             $review = $this->model->get($id);
@@ -273,6 +270,12 @@ class Reviewcontroller {
 
 
     public function addreview ($params = null) {
+        if(!$this->helper->Islogged()){
+            $this->view->response("Forbidden, you are not logged", 401);
+            return;
+        
+        }
+
         $review = $this->getData();
 
         if (empty($review->review) || empty($review->score) || empty($review->fk_id_chocolate)) {

@@ -1,77 +1,101 @@
-# API REST para el recurso de reseñas de chocolates.
-Una sencilla API REST de reseñas de chocolates.
-# Importar la base de datos
-- importar desde PHPMyAdmin (o cualquiera similar) database/tpe.sql
-# Pueba con postman, o similar.
+# API REST for chocolate reviews resource.
+A API REST for chocolate reviews.
+
+# Import the database
+
+- import from PHPMyAdmin (or any similar) database/tpe.sql
+
+# Try with postman :
+
 El endpoint de la API es: http://localhost/tucarpetalocal/chocolate-rest/api/reviews
-# Obtener todas las reseñas:
- Verbo http GET + http://localhost/tucarpetalocal/chocolate-rest/api/reviews.
 
-Si la solicitud sale bien, el "status code" será 200 OK. 
-# Obtener una reseña:
-Verbo http GET + http://localhost/tucarpetalocal/chocolate-rest/api/reviews/id de reseña
+# Get all the reviews: 
+ Method http GET + http://localhost/yourlocalfolder/chocolate-rest/api/reviews.
 
-Si la solicitud sale bien, el "status code" será 200 OK. 
+ If the request succeeds, the "status code" will be 200 OK.
 
-# Crear una nueva reseña :
- verbo http POST + http://localhost/tucarpetalocal/chocolate-rest/api/reviews + http body
- Ejemplo de body para el post:
+# Get a review :
+  Method http GET + http://localhost/yourlocalfolder/chocolate-rest/api/reviews/idofreview
+
+  If the request succeeds, the "status code" will be 200 OK.
+
+
+# Delete a review: 
+
+  Method http DELETE + http://localhost/yourlocalfolder/chocolate-rest/api/reviews/id
+
+  If the request succeeds, the "status code" will be 200 OK.
+
+# Sort descending by id :
+
+  Method http GET + http://localhost/yourlocalfolder/chocolate-rest/api/reviews?order=desc
+
+  If the request succeeds, the "status code" will be 200 OK.
+
+# Just filter by score (from one to five)
+ Method http GET + http://localhost/yourlocalfolder/chocolate-rest/api/reviews?filter=numberintbetweenoneandfive
+
+  If the request succeeds, the "status code" will be 200 OK.
+
+# Just Paginate:
+ Method http GET + http://localhost/yourlocalfolder/chocolate-rest/api/reviews?page=numberint&limit=numberint
+
+  If the request succeeds, the "status code" will be 200 OK.
+
+# Filter, order and paginate :
+  Method http GET + http://localhost/projects/chocolate_rest/api/reviews?filter=numberintbetweenoneandfive&sortby=field&order=asc/desc&page=numberint&limit=numberint
+
+  If the request succeeds, the "status code" will be 200 OK.
+  
+# Filter and order :
+  Method http GET + http://localhost/projects/chocolate_rest/api/reviews?filter=numberintbetweenoneandfive&sortby=field&order=asc/desc
+
+  If the request succeeds, the "status code" will be 200 OK.
+  
+  
+# Filter and paginate :
+  Method http GET +http://localhost/projects/chocolate_rest/api/reviews?filter=numberintbetweenoneandfive&page=numberint&limit=numberint
+
+ If the request succeeds, the "status code" will be 200 OK.
+  
+# Order and paginate : 
+ Method http GET + http://localhost/projects/chocolate_rest/api/reviews?sortby=field&order=asc/desc&page=numberint&limit=numberint
+
+If the request succeeds, the "status code" will be 200 OK.
+  
+
+# CREATE REVIEW WITH POST
+
+First, you must be logged, for that you must authenticate.
+
+# AUTH TOKEN:
+  For get the token, you put in the URL :
+ METHOD HTTP GET +  http://localhost/projects/yourlocalfolder/api/reviews/auth/token
+
+ In postman (or similar like Thunder client), your request it in the part of authorization BASIC AUTH, with your user and password.
+ 
+ Then, when you have the token, in postman, you put in the part of bearer token, the token. 
+ 
+  And then , with the method post you create the review. For that, in the url: 
+ METHOD HTTP POST + http://localhost/projects/yourlocalfolder/api/reviews
+
+In the http body, for example:
 {   
-    "review": "La verdad me encanto este chocolate",
+    "review": "I love it",
     "score": 5,
     "fk_id_chocolate": 67
 }
-Si la solicitud sale bien, el "status code" será 201 CREATED. 
+Finally, you submit the http body and the token.
+If the request succeeds, the "status code" will be 200 OK.
 
-# Eliminar una reseña:
- verbo http DELETE + http://localhost/tucarpetalocal/chocolate-rest/api/reviews/id
+ # Possible mistakes: 
 
- Si la solicitud sale bien, el "status code" será 200 OK.
-
-# Solo ordenar descendentemente por id:
-Verbo http GET + http://localhost/tucarpetalocal/chocolate-rest/api/reviews?order=desc
-
-Si la solicitud sale bien, el "status code" será 200 OK.  
-# Solo Filtrar por puntuacion (numero entre el 1 y 5):
- verbo http GET + http://localhost/tucarpetalocal/chocolate-rest/api/reviews?filter=enteroentreelunoycinco
-
-  Si la solicitud sale bien, el "status code" será 200 OK. 
-
-# Solo Paginar:
- verbo http GET + http://localhost/tucarpetalocal/chocolate-rest/api/reviews?page=numeroentero&limit=numeroentero
-
-  Si la solicitud sale bien, el "status code" será 200 OK. 
-  
-# Filtrar, paginar, ordenar :
-  verbo http GET + http://localhost/projects/chocolate_rest/api/reviews?filter=numeroentreelunoycinco&sortby=campo&order=asc/desc&page=numeroentero&limit=numeroentero
-
-  Si la solicitud sale bien, el "status code" será 200 OK. 
-  
-# Filtrar y ordenar :
-  verbo http GET + http://localhost/projects/chocolate_rest/api/reviews?filter=enteroentreelunoycinco&sortby=campo&order=asc/desc
-
-  Si la solicitud sale bien, el "status code" será 200 OK. 
-  
-  
-# Filtrar y paginar :
-  verbo http GET +http://localhost/projects/chocolate_rest/api/reviews?filter=enteroentreelunoycinco&page=numeroentero&limit=numeroentero
-
-  Si la solicitud sale bien, el "status code" será 200 OK. 
-  
-# Ordenar y paginar : 
- verbo http GET + http://localhost/projects/chocolate_rest/api/reviews?sortby=campo&order=asc/desc&page=numeroentero&limit=numeroentero
-
-  Si la solicitud sale bien, el "status code" será 200 OK. 
-  
-
- # Errores posibles:
-
- 404 Not Found: Este error puede salir, si el recurso al que quiere acceder no existe. Por ejemplo, si pone pagina numero 800 en la paginacion, como no existen tantos datos en la tabla es probable que salga.
+ 404 Not Found: This error can occur if the resource you want to access does not exist. For example, if you put page number 800 in the pagination, since there is not so much data in the table, it is likely to come out.
  
- 400 Bad Request: Este error puede salir, debido a que el servidor no pudo interpretar la solicitud dada una sintaxis inválida en la url.
+ 400 Bad Request: This error can occur because the server was unable to interpret the request due to invalid syntax in the url.
 
 
- Si escribe mal alguno de los parametros, por defecto se mostraran las reseñas ordenadas ascendementemente por id de reseña.
+If you misspell any of the parameters, by default reviews will be displayed in ascending order by review id.
 
 
 

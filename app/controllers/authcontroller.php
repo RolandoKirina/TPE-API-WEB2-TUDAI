@@ -1,6 +1,6 @@
 <?php
-require_once './app/models/task.model.php';
-require_once './app/views/api.view.php';
+require_once './app/models/reviewmodel.php';
+require_once './app/views/apiview.php';
 require_once './app/helpers/authhelper.php';
 
 function base64url_encode($data) {
@@ -10,15 +10,14 @@ function base64url_encode($data) {
 class Authcontroller {
     private $model;
     private $view;
-    private $authhelper;
+    private $helper;
     private $data;
 
     public function __construct() {
-        //$this->model = new TaskModel();
+        //$this->model = new Reviewmodel();
         $this->view = new Apiview();
-        $this->authhelper = new Authhelper();
-        
-        // lee el body del request
+        $this->helper = new Authhelper();
+    
         $this->data = file_get_contents("php://input");
     }
 
@@ -26,10 +25,11 @@ class Authcontroller {
         return json_decode($this->data);
     }
 
-    public function getToken($params = null) {
+    public function gettoken($params = null) {
+        
         // GET "Basic base64(user:pass)
         //GET HEADER
-        $basic = $this->authhelper->getauthheader();
+        $basic = $this->helper->Getauthheader();
         
         if(empty($basic)){
             $this->view->response('Forbidden', 401);
