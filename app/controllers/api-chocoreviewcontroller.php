@@ -1,16 +1,19 @@
 <?php
 require_once './app/models/reviewmodel.php';
 require_once './app/views/apiview.php';
+require_once './app/helpers/authhelper.php';
 
 class Reviewcontroller {
 
     private $model;
     private $view;
     private $data;
+    private $authhelper;
 
     function __construct () {
         $this->model = new Reviewmodel();
         $this->view = new Apiview();
+        $this->helper = new authhelper();
         // data se usa, para leer cada vez el body del request
         $this->data = file_get_contents("php://input");
     }
@@ -250,15 +253,20 @@ class Reviewcontroller {
     }
     
     function deletereview($params = null) { 
-        $id = $params[':ID'];
-
-        $review = $this->model->get($id);
-        if ($review) {
-            $this->model->delete($id);
-            $this->view->response("La reseña con el id $id , se ha eliminado con éxito.", 200);
-        } 
-        else 
-            $this->view->response("La reseña con el id $id no existe.", 404);
+        if ($params){
+            $id = $params[':ID'];
+            $review = $this->model->get($id);
+            if ($review) {
+                $this->model->delete($id);
+                $this->view->response("La reseña con el id $id , se ha eliminado con éxito.", 200);
+            } 
+            else {
+                $this->view->response("La reseña con el id $id no existe.", 404);
+            }
+        }
+        else {
+            $this->view->response("error", 400);
+        }
     }
 
 
@@ -277,5 +285,9 @@ class Reviewcontroller {
                 $this->view->response("La id de ese chocolate no existe, pruebe con otra", 404);
             }
         }
+    }
+
+    public function pagenotfound (){
+        $this->view->response("Pagina no encontrada", 404);
     }
 }

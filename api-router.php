@@ -10,6 +10,8 @@ $router->addRoute('reviews', 'GET', 'Reviewcontroller', 'getreviews');
 $router->addRoute('reviews/:ID', 'GET', 'Reviewcontroller', 'getreview');
 $router->addRoute('reviews/:ID', 'DELETE', 'Reviewcontroller', 'deletereview');
 $router->addRoute('reviews', 'POST', 'Reviewcontroller', 'addreview'); 
+//para casos de url no encontrada
+$router->setDefaultRoute('Reviewcontroller', 'pagenotfound');
 
 // ejecuta la ruta (sea cual sea)
 $router->route($_GET["resource"], $_SERVER['REQUEST_METHOD']);
