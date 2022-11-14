@@ -8,7 +8,7 @@ class Reviewcontroller {
     private $model;
     private $view;
     private $data;
-    private $authhelper;
+    private $helper;
 
     function __construct () {
         $this->model = new Reviewmodel();
@@ -21,7 +21,7 @@ class Reviewcontroller {
     private function getdata() {
         return json_decode($this->data);
     }
-    //convierte la data del body en json.
+    //converts the data of the body in json.
     
     function getreviews ($params = null) {
         $paramers = $this->paramers();
@@ -39,7 +39,7 @@ class Reviewcontroller {
                if ($reviews)
                $this->view->response($reviews);
                else {
-                   $this->view->response("No existen reseñas con esa puntuacion", 404);
+                   $this->view->response("There are no reviews with that score", 404);
                }
             }
             elseif ($filter < 0){
@@ -49,20 +49,20 @@ class Reviewcontroller {
                 $this->error();
             }
         }
-        //ordenar por campo  asc o desc 
+        //order by fields
         else if(isset($_GET['sortby']) && isset($_GET['order']) && !isset($_GET['filter']) && !isset($_GET['page']) && !isset($_GET['limit'])) {
           
             $sortby = $_GET['sortby'];
             $order = $_GET['order'];
             
-            if(isset($paramers[$sortby])&& isset($paramers[$order])) { //solo si los campos existen en la tabla se arma la sentencia con las variables
+            if(isset($paramers[$sortby])&& isset($paramers[$order])) { 
                 $reviews = $this->model->sortbyorder($sortby, $order);
                 $this->view->response($reviews);
             }
             else {
                 $this->errorparams();
             }
-        }//paginar 
+        }//paginate
         else if(isset($_GET['page']) && isset($_GET['limit']) && !isset($_GET['order']) && !isset($_GET['sortby']) && !isset($_GET['filter']))  {
             $page = $_GET['page'];
             $limit = $_GET['limit'];
@@ -74,7 +74,7 @@ class Reviewcontroller {
                         $this->view->response($reviews);
                     }
                     else {
-                        $this->view->response("No existen mas paginas disponibles", 200);
+                        $this->view->response("There are no more pages available", 200);
                     }
                 }
                 elseif (($page < 0) || ($limit < 0)){
@@ -85,22 +85,22 @@ class Reviewcontroller {
                 }
             }
             catch (PDOException $e){
-                $this->view->response("Debe ingresar a partir de la pagina 1", 400);
+                $this->view->response("You must enter from page number one", 400);
             }
         } 
-        //filtrar y ordenar
+        //filter and order
         else if (isset($_GET['filter']) && isset($_GET['order']) && isset($_GET['sortby']) && !isset($_GET['page']) && !isset($_GET['limit'])) {
                 $filter = $_GET['filter'];
                 $sortby = $_GET['sortby'];
                 $order = $_GET['order']; 
             if (is_numeric($filter) && ($filter > 0)) {
-                if(isset($paramers[$sortby]) && isset($paramers[$order])) { //solo si los campos existen en la tabla se arma la sentencia con las variables
+                if(isset($paramers[$sortby]) && isset($paramers[$order])) {
                     $reviews = $this->model->filterandorder($filter, $sortby , $order);
                     if ($reviews){
                         $this->view->response($reviews);
                     }
                     else {
-                        $this->view->response("No existen reseñas con esa puntuacion", 404);
+                        $this->view->response("There are no reviews with that score", 404);
                     }
                 }
             }
@@ -111,7 +111,7 @@ class Reviewcontroller {
                 $this->errorparams();
             }
           } 
-        //filtrar y paginar
+        //filter and paginate
         else if (isset($_GET['filter']) && isset($_GET['page']) && isset($_GET['limit']) && !isset($_GET['order']) && !isset($_GET['sortby'])) {
             $page = $_GET['page'];
             $limit = $_GET['limit'];
@@ -124,7 +124,7 @@ class Reviewcontroller {
                         $this->view->response($reviews);
                     }
                     else {
-                        $this->view->response("No existe el recurso que esta pidiendo", 404);
+                        $this->view->response("The resource you are requesting does not exist", 404);
                     }
                 }
                 elseif (($filter < 0) || ($page < 0) || ($limit <0 )){
@@ -135,10 +135,10 @@ class Reviewcontroller {
                 }
             }
             catch (PDOException $e){
-                $this->view->response("Debe ingresar a partir de la pagina 1", 400);
+                $this->view->response("You must enter from page number 1", 400);
             }
         }
-        //ordenar y paginar
+        //order and paginate
         else if (isset($_GET['order']) && isset($_GET['sortby']) && isset($_GET['page']) && isset($_GET['limit']) && !isset($_GET['filter']) ) {
             $sortby = $_GET['sortby'];
             $order = $_GET['order'];
@@ -151,7 +151,7 @@ class Reviewcontroller {
                     if ($reviews)
                     $this->view->response($reviews);
                     else {
-                        $this->view->response("No existen mas paginas disponibles", 404);
+                        $this->view->response("There are no more pages available", 404);
                     }
                 }
                 elseif (($page <0) || ($limit <0)){
@@ -162,10 +162,10 @@ class Reviewcontroller {
                 }
             }
            catch (PDOException $e){
-                $this->view->response("Debe ingresar a partir de la pagina 1", 400);
+                $this->view->response("You must enter from page number 1", 400);
            }
         }
-        //orden solo...
+        //just order
         else if (isset($_GET['order']) && !isset($_GET['filter']) && !isset($_GET['sortby']) && !isset($_GET['page']) && !isset($_GET['limit'])){
             if ($_GET['order'] == 'desc') {
                 $reviews = $this->model->orderdesc();
@@ -175,7 +175,7 @@ class Reviewcontroller {
                 $this->errorparams();
             }
         }
-        //filtrar, ordenar y paginar
+        //filter, order, and paginate
         else if (isset($_GET['filter']) && isset($_GET['sortby']) && isset($_GET['order']) && isset($_GET['page']) && isset($_GET['limit'])) {
             $filter = $_GET['filter'];
             $sortby = $_GET['sortby'];
@@ -190,7 +190,7 @@ class Reviewcontroller {
                         $this->view->response($reviews);
                     }
                     elseif ($reviews == []){
-                        $this->view->response("No existe una reseña que cumpla con esas condiciones", 404);
+                        $this->view->response("There is no review available", 404);
                     }
                     else {
                         $this->errorparams();
@@ -200,7 +200,7 @@ class Reviewcontroller {
                 elseif (($filter<0) || ($page<0) || ($limit <0)){
                     $this->errornumber0();
                 }
-                //cuando no es numerico limite o pagina o filtro
+                //when there are not numeric limit or page or filter
                 elseif (isset($paramers[$sortby]) && isset($paramers[$order]) && !is_numeric($page) && (!is_numeric($limit)) && (!is_numeric($filter))) {
                     $this->error();
                 }
@@ -209,7 +209,7 @@ class Reviewcontroller {
                 }
             }
             catch (PDOException $e){
-                $this->view->response("Debe ingresar a partir de la pagina 1", 400);
+                $this->view->response("You must enter from page number one", 400);
             }
         }
         else {
@@ -219,16 +219,16 @@ class Reviewcontroller {
     }
     
     function error () {
-        $this->view->response("Debe ingresar un numero", 400);
+        $this->view->response("You must enter a number", 400);
         die();
     }
 
     function errorparams () {
-        $this->view->response("Parametros incorrectos", 400);
+        $this->view->response("Incorrect params", 400);
         die();
     }
     function errornumber0() {
-        $this->view->response("Debe ingresar un numero mayor a 0 ", 400);
+        $this->view->response("You must enter a number greater than 0", 400);
         die();
     }
     function paramers () {
@@ -243,29 +243,31 @@ class Reviewcontroller {
     }
 
     function getreview($params = null) {
-        //obtengo id x get
+
         $id = $params[':ID'];
         $review = $this->model->get($id);
         if ($review)
             $this->view->response($review);
         else 
-          $this->view->response("La review con el id=$id no existe", 404);
+          $this->view->response("The review with the id=$id does not exist", 404);
     }
     
     function deletereview($params = null) { 
+        if(!$this->Authelper->Islogged()){
+            $this->view->response("Forbidden, you are not logged", 401);
+            return;
+        }
+    
         if ($params){
             $id = $params[':ID'];
             $review = $this->model->get($id);
             if ($review) {
                 $this->model->delete($id);
-                $this->view->response("La reseña con el id $id , se ha eliminado con éxito.", 200);
+                $this->view->response("The review with the id : $id ,has been removed successfully.", 200);
             } 
             else {
-                $this->view->response("La reseña con el id $id no existe.", 404);
+                $this->view->response("The review with the id:  $id does not exist.", 404);
             }
-        }
-        else {
-            $this->view->response("error", 400);
         }
     }
 
@@ -274,20 +276,20 @@ class Reviewcontroller {
         $review = $this->getData();
 
         if (empty($review->review) || empty($review->score) || empty($review->fk_id_chocolate)) {
-            $this->view->response("Complete todos los datos del body", 400);
+            $this->view->response("Fill in all the data of the body", 400);
         } 
         else {
             try {
                 $id = $this->model->add($review->review, $review->score, $review->fk_id_chocolate);
-                $this->view->response("Reseña creada", 201);
+                $this->view->response("Review Created", 201);
             }
             catch (PDOException $e){
-                $this->view->response("La id de ese chocolate no existe, pruebe con otra", 404);
+                $this->view->response("The id of that chocolate does not exist, try another", 404);
             }
         }
     }
 
     public function pagenotfound (){
-        $this->view->response("Pagina no encontrada", 404);
+        $this->view->response("Page not found", 404);
     }
 }

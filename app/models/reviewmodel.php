@@ -10,7 +10,7 @@
     }
 
     function __construct () {
-        //cada vez que hay un metodo en la clase automaticamente se abre la conexion a la db
+        //every time there is a method in the class, the connection to the db is automatically opened
         $this->db =  $this->connect();
     }
 
