@@ -33,8 +33,8 @@
         $query->execute([$id]);
     }
 
-    function getall () {
-        $query = $this->db->prepare("SELECT id_review, review, score, fk_id_chocolate, nombre_chocolate FROM review a INNER JOIN item b ON a.fk_id_chocolate = b.id_chocolate ");
+    function getallasc () {
+        $query = $this->db->prepare("SELECT id_review, review, score, fk_id_chocolate, nombre_chocolate FROM review a INNER JOIN item b ON a.fk_id_chocolate = b.id_chocolate ORDER BY id_review asc ");
         $query->execute();
         $reviews = $query->fetchAll(PDO::FETCH_OBJ);
         return $reviews;
