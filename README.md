@@ -9,7 +9,7 @@ A API REST for chocolate reviews.
 
 The endpoint of the API is: http://localhost/yourlocalfolder/chocolate-rest/api/reviews
 
-# Get all the reviews: 
+# Get all the reviews order asc by id: 
  Method http GET + http://localhost/yourlocalfolder/chocolate-rest/api/reviews.
 
  If the request succeeds, the "status code" will be 200 OK.
