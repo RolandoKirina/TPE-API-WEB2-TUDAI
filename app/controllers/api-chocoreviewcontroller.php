@@ -54,7 +54,10 @@ class Reviewcontroller {
           
             $sortby = $_GET['sortby'];
             $order = $_GET['order'];
-            
+
+            strtolower($sortby);
+            strtolower($order);
+
             if(isset($paramers[$sortby]) && isset($paramers[$order])) { 
                 $reviews = $this->model->sortbyorder($sortby, $order);
                 $this->view->response($reviews);
@@ -65,8 +68,10 @@ class Reviewcontroller {
         }
         //paginate
         else if(isset($_GET['page']) && isset($_GET['limit']) && !isset($_GET['order']) && !isset($_GET['sortby']) && !isset($_GET['filter']))  {
+            
             $page = $_GET['page'];
             $limit = $_GET['limit'];
+
             try {
                 if (is_numeric($page) && (is_numeric($limit)) && ($page > 0) && ($limit > 0)) {
                     $start = ($page -1) *  $limit;
@@ -145,6 +150,10 @@ class Reviewcontroller {
             $order = $_GET['order'];
             $page = $_GET['page'];
             $limit = $_GET['limit'];
+
+            strtolower($sortby);
+            strtolower($order);
+
             try {
                 if (isset($paramers[$sortby]) && isset($paramers[$order]) && is_numeric($page) && (is_numeric($limit)) && ($page>0) && ($limit>0)) { 
                     $start = ($page -1) *  $limit;
@@ -168,7 +177,9 @@ class Reviewcontroller {
         }
         //just order desc
         else if (isset($_GET['order']) && !isset($_GET['filter']) && !isset($_GET['sortby']) && !isset($_GET['page']) && !isset($_GET['limit'])){
-            if ($_GET['order'] == 'desc') {
+            $desc = $_GET['order'];
+            strtolower($desc);
+            if (isset($paramers[$desc]))  {
                 $reviews = $this->model->orderdesc();
                 $this->view->response($reviews);
             }
@@ -183,6 +194,8 @@ class Reviewcontroller {
             $order = $_GET['order'];
             $page = $_GET['page'];
             $limit = $_GET['limit'];
+            strtolower($sortby);
+            strtolower($order);
             try {
                 if(isset($paramers[$sortby]) && isset($paramers[$order]) && is_numeric($page) && (is_numeric($limit)) && (is_numeric($filter)) && ($filter > 0) && ($page > 0) && ($limit > 0)) { 
                     $start = ($page -1) *  $limit;
@@ -289,7 +302,7 @@ class Reviewcontroller {
                 $this->view->response("Review Created", 201);
             }
             catch (PDOException $e){
-                $this->view->response("The id of that chocolate does not exist, try another", 404);
+                $this->view->response("The id : $id of that chocolate does not exist, try another", 404);
             }
         }
     }
