@@ -4,6 +4,7 @@ require_once './app/controllers/api-chocoreviewcontroller.php';
 require_once './app/controllers/authcontroller.php';
 
 // create the router
+
 $router = new Router();
 
 // routing table

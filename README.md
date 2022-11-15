@@ -102,13 +102,13 @@ If the request succeeds, the "status code" will be 201 CREATED.
 
  # Possible mistakes: 
 
- 404 Not Found: This error can occur if the resource you want to access does not exist. For example, if you put page number 800 in the pagination, since there is not so much data in the table, it is likely to come out.
+ 404 Not Found : This error can occur if the resource you want to access does not exist. For example, if you put page number 800 in the pagination, since there is not so much data in the table, it is likely to come out.
  
- 400 Bad Request: This error can occur because the server was unable to interpret the request due to invalid syntax in the url.
+ 400 Bad Request : This error can occur because the server was unable to interpret the request due to invalid syntax in the url.
 
- 401 Unauthorized: You must authenticate to make a post.
+ 401 Unauthorized : You must authenticate to make a post.
   
- 403 Forbidden: A valid request was received, but access to the requested action was denied.
+ 403 Forbidden : A valid request was received, but access to the requested action was denied.
 
  If you misspell any of the parameters, by default reviews will be displayed in ascending order by review id.
 
