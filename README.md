@@ -25,7 +25,7 @@ The endpoint of the API is: http://localhost/yourlocalfolder/chocolate-rest/api/
 
   If the request succeeds, the "status code" will be 200 OK.
 
-#  Just sort descending by id :
+# Just sort descending by id :
 
   Method http GET + http://localhost/yourlocalfolder/chocolate-rest/api/reviews?order=desc
 
@@ -63,18 +63,22 @@ The endpoint of the API is: http://localhost/yourlocalfolder/chocolate-rest/api/
 # Order and paginate : 
  Method http GET + http://localhost/projects/chocolate_rest/api/reviews?sortby=field&order=asc/desc&page=numberint&limit=numberint
 
-If the request succeeds, the "status code" will be 200 OK.
+ If the request succeeds, the "status code" will be 200 OK.
   
 
 # CREATE REVIEW WITH POST
 
-First, you must be logged, for that you must authenticate.
+ Who wants to use the API for POST must first request a token (Json web token), for that you must be authenticate
+
 
 # AUTH TOKEN:
  For get the token, you put in the URL :
  METHOD HTTP GET +  http://localhost/projects/yourlocalfolder/api/reviews/auth/token
 
- In postman (or similar like Thunder client), your request the token in the part of authorization BASIC AUTH, with your user and password.
+ In postman (or similar like Thunder client), your request the token in the part of authorization BASIC AUTH, with the user and password.
+ 
+ USER: prueba@gmail.com
+ PASSWORD: 1234
  
  Then, when you have it, in postman, you put the token in the part of bearer token. 
  
@@ -89,6 +93,12 @@ In the http body, you put for example:
 }
 Finally, you submit the http body and the token.
 If the request succeeds, the "status code" will be 201 CREATED.
+## Valid atributes:
+
+  id_review
+  review
+  score
+  fk_id_chocolate
 
  # Possible mistakes: 
 
@@ -100,7 +110,7 @@ If the request succeeds, the "status code" will be 201 CREATED.
   
  403 Forbidden: A valid request was received, but access to the requested action was denied.
 
-If you misspell any of the parameters, by default reviews will be displayed in ascending order by review id.
+ If you misspell any of the parameters, by default reviews will be displayed in ascending order by review id.
 
 
 

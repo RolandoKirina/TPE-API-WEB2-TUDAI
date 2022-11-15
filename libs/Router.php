@@ -72,4 +72,5 @@ class Router {
     public function setDefaultRoute($controller, $method) {
         $this->defaultRoute = new Route("", "", $controller, $method);
     }
+    
 }
