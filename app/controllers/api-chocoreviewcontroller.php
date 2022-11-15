@@ -99,6 +99,10 @@ class Reviewcontroller {
                 $filter = $_GET['filter'];
                 $sortby = $_GET['sortby'];
                 $order = $_GET['order']; 
+
+                strtolower($sortby);
+                strtolower($order);
+                
             if (is_numeric($filter) && ($filter > 0)) {
                 if(isset($paramers[$sortby]) && isset($paramers[$order])) {
                     $reviews = $this->model->filterandorder($filter, $sortby , $order);
