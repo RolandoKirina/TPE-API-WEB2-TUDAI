@@ -88,12 +88,5 @@
         $query->execute([$filter]);
         $reviews = $query->fetchAll(PDO::FETCH_OBJ);
         return $reviews;
-    }
-
-    function execute ($query, $filter = null){
-
-        $query->execute();
-        $reviews = $query->fetchAll(PDO::FETCH_OBJ);
-        return $reviews;
-    }
+    } 
  }
