@@ -25,7 +25,7 @@ The endpoint of the API is: http://localhost/yourlocalfolder/chocolate-rest/api/
 
   If the request succeeds, the "status code" will be 200 OK.
 
-# Sort descending by id :
+#  Just sort descending by id :
 
   Method http GET + http://localhost/yourlocalfolder/chocolate-rest/api/reviews?order=desc
 
@@ -96,6 +96,9 @@ If the request succeeds, the "status code" will be 200 OK.
  
  400 Bad Request: This error can occur because the server was unable to interpret the request due to invalid syntax in the url.
 
+ 401 Unauthorized: You must authenticate to make a post.
+  
+ 403 Forbidden: A valid request was received, but access to the requested action was denied.
 
 If you misspell any of the parameters, by default reviews will be displayed in ascending order by review id.
 

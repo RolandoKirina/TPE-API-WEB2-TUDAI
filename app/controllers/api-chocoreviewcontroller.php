@@ -14,7 +14,7 @@ class Reviewcontroller {
         $this->model = new Reviewmodel();
         $this->view = new Apiview();
         $this->helper = new Authhelper();
-        // data se usa, para leer cada vez el body del request
+        // data is used, to read every time the body of the request.
         $this->data = file_get_contents("php://input");
     }
 
@@ -31,7 +31,7 @@ class Reviewcontroller {
         $page = null;
         $limit = null;
         $start = null;
-        //filtro
+        //filter
         if(isset($_GET['filter']) && !empty($_GET['filter']) && !isset($_GET['sortby']) && !isset($_GET['order']) && !isset($_GET['page']) && !isset($_GET['limit'])) {
             $filter = $_GET['filter'];
             if (is_numeric($filter) && ($filter > 0)){
@@ -166,7 +166,7 @@ class Reviewcontroller {
                 $this->view->response("You must enter from page number 1", 400);
            }
         }
-        //just order
+        //just order desc
         else if (isset($_GET['order']) && !isset($_GET['filter']) && !isset($_GET['sortby']) && !isset($_GET['page']) && !isset($_GET['limit'])){
             if ($_GET['order'] == 'desc') {
                 $reviews = $this->model->orderdesc();
@@ -236,6 +236,7 @@ class Reviewcontroller {
         $paramers = array(
         'id_review' => 'id_review',
         'review' => 'review',
+        'score' => 'score',
         'fk_id_chocolate' => 'fk_id_chocolate',
         'asc' => 'asc',
         'desc' => 'desc',

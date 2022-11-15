@@ -44,6 +44,7 @@ class Authcontroller {
 
         //VALIDATE USERPASS
         $userpass = base64_decode($basic[1]); // user:pass
+        //divides userpass into two
         $userpass = explode(":", $userpass);
         $user = $userpass[0];
         $pass = $userpass[1];
