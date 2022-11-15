@@ -33,7 +33,7 @@ class Authcontroller {
         $basic = $this->helper->Getauthheader();
         
         if(empty($basic)){
-            $this->view->response('Forbidden', 401);
+            $this->notlogged();
             return;
         }
         $basic = explode(" ",$basic); // ["Basic" "base64(user:pass)"]
@@ -62,7 +62,7 @@ class Authcontroller {
             );
             $payload = array(
                 'id' => 1,
-                'name' => "Nico",
+                'name' => "User",
                 'exp' => time()+3600 //one hour
             );
             $header = base64url_encode(json_encode($header));
@@ -75,7 +75,11 @@ class Authcontroller {
             $this->view->response($token);
         }
         else{
-            $this->view->response('Forbidden', 401);
+            $this->notlogged();
         }
+    }
+
+    function notlogged (){
+        $this->view->response('Forbidden, you are not logged', 401);
     }
 }

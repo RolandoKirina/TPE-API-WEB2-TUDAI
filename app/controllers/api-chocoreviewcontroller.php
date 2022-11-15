@@ -247,10 +247,13 @@ class Reviewcontroller {
 
         $id = $params[':ID'];
         $review = $this->model->get($id);
-        if ($review)
+        if (is_numeric($review) &&  ($review>0))
             $this->view->response($review);
+            if (!is_numeric($review)) {
+                $this->error();
+            }
         else 
-          $this->view->response("The review with the id=$id does not exist", 404);
+          $this->view->response("The review with the id: $id does not exist", 404);
     }
     
     function deletereview($params = null) { 
@@ -263,11 +266,10 @@ class Reviewcontroller {
                 $this->view->response("The review with the id : $id ,has been removed successfully.", 200);
             } 
             else {
-                $this->view->response("The review with the id:  $id does not exist.", 404);
+                $this->view->response("The review with the id :  $id does not exist.", 404);
             }
         }
     }
-
 
     public function addreview ($params = null) {
         if(!$this->helper->Islogged()){
