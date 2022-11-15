@@ -74,7 +74,7 @@ First, you must be logged, for that you must authenticate.
  For get the token, you put in the URL :
  METHOD HTTP GET +  http://localhost/projects/yourlocalfolder/api/reviews/auth/token
 
- In postman (or similar like Thunder client), your request it in the part of authorization BASIC AUTH, with your user and password. That is important, because the authentication just  works with BASIC AUTH. 
+ In postman (or similar like Thunder client), your request the token in the part of authorization BASIC AUTH, with your user and password.
  
  Then, when you have it, in postman, you put the token in the part of bearer token. 
  
@@ -88,7 +88,7 @@ In the http body, you put for example:
     "fk_id_chocolate": 67
 }
 Finally, you submit the http body and the token.
-If the request succeeds, the "status code" will be 200 OK.
+If the request succeeds, the "status code" will be 201 CREATED.
 
  # Possible mistakes: 
 
