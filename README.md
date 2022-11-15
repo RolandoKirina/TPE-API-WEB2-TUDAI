@@ -87,11 +87,13 @@ A API REST for chocolate reviews.
  - METHOD HTTP POST + http://localhost/projects/yourlocalfolder/api/reviews
 
 In the http body, you put for example:
+
 {   
     "review": "I love it",
     "score": 5,
     "fk_id_chocolate": 67
 }
+
 Finally, you submit the http body and the token.
 If the request succeeds, the "status code" will be 201 CREATED.
 ## Valid atributes:
