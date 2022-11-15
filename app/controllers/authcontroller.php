@@ -2,19 +2,21 @@
 require_once './app/models/reviewmodel.php';
 require_once './app/views/apiview.php';
 require_once './app/helpers/authhelper.php';
+require_once './app/models/usermodel.php';
+require_once './app/token.php';
 
 function base64url_encode($data) {
     return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
 }
 
 class Authcontroller {
-    private $model;
+    private $usermodel;
     private $view;
     private $helper;
     private $data;
 
     public function __construct() {
-        //$this->model = new Reviewmodel();
+        $this->usermodel = new Usermodel();
         $this->view = new Apiview();
         $this->helper = new Authhelper();
     
@@ -26,7 +28,6 @@ class Authcontroller {
     }
 
     public function gettoken($params = null) {
-        
         // GET "Basic base64(user:pass)
         //GET HEADER
         $basic = $this->helper->Getauthheader();
@@ -42,12 +43,18 @@ class Authcontroller {
         }
 
         //VALIDATE USERPASS
-        $userpass = base64_decode($basic[1]); // user:pass 
-        //divides userpass into two
+        $userpass = base64_decode($basic[1]); // user:pass
         $userpass = explode(":", $userpass);
         $user = $userpass[0];
         $pass = $userpass[1];
-        if($user == "Nico" && $pass == "web"){
+
+        $email = $user;
+        $password = $pass;
+
+        //user of the table users
+        $user = $this->usermodel->getuser($email);
+        //verify user and pass of the db. 
+        if(!empty($user) && password_verify($password, $user->password)) {
             // CREATE THE TOKEN IF THE USER IS AUTHORIZED
             $header = array(
                 'alg' => 'HS256',
@@ -60,7 +67,9 @@ class Authcontroller {
             );
             $header = base64url_encode(json_encode($header));
             $payload = base64url_encode(json_encode($payload));
-            $signature = hash_hmac('SHA256', "$header.$payload", "Clave1234", true);
+
+            $keytoken = getkeytoken();
+            $signature = hash_hmac('SHA256', "$header.$payload", "$keytoken", true);
             $signature = base64url_encode($signature);
             $token = "$header.$payload.$signature";
             $this->view->response($token);
@@ -69,6 +78,4 @@ class Authcontroller {
             $this->view->response('Forbidden', 401);
         }
     }
-
-
 }

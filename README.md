@@ -69,14 +69,14 @@ If the request succeeds, the "status code" will be 200 OK.
 First, you must be logged, for that you must authenticate.
 
 # AUTH TOKEN:
-  For get the token, you put in the URL :
+ For get the token, you put in the URL :
  METHOD HTTP GET +  http://localhost/projects/yourlocalfolder/api/reviews/auth/token
 
  In postman (or similar like Thunder client), your request it in the part of authorization BASIC AUTH, with your user and password.
  
  Then, when you have the token, in postman, you put in the part of bearer token, the token. 
  
-  And then , with the method post you create the review. For that, in the url: 
+ And then , with the method post you create the review. For that, in the url: 
  METHOD HTTP POST + http://localhost/projects/yourlocalfolder/api/reviews
 
 In the http body, for example:

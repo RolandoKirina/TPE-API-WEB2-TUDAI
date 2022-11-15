@@ -275,7 +275,6 @@ class Reviewcontroller {
             return;
         
         }
-
         $review = $this->getData();
 
         if (empty($review->review) || empty($review->score) || empty($review->fk_id_chocolate)) {
